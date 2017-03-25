@@ -12,17 +12,15 @@
     tools:context="com.example.dam.mycrush.LoginActivity">
 
     <com.facebook.login.widget.LoginButton
+        android:id="@+id/fb_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id = "@+id/fb_login"
-        android:text="FB"
-        />
+        android:text="FB" />
 
     <Button
+        android:id="@+id/google_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="G+"
-        android:id = "@+id/google_login"
-        />
+        android:text="G+" />
 
 </LinearLayout>

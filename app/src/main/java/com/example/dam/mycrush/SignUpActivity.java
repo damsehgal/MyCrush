@@ -6,12 +6,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
@@ -22,24 +23,39 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class LoginActivity extends AppCompatActivity
+public class SignUpActivity extends AppCompatActivity
 {
 
-    private static final String TAG = LoginActivity.class.getSimpleName();
-    LoginButton fbLogin;
+    private static final String TAG = SignUpActivity.class.getSimpleName();
+    Button signup;
+    LoginButton fbSignup;
+    EditText name;
+    EditText contactNumber;
+    EditText email;
+    EditText password;
+    EditText confirmPassword;
+    DatePicker dob;
     CallbackManager callbackManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        callbackManager = CallbackManager.Factory.create();
-        setContentView(R.layout.activity_login);
-        fbLogin = (LoginButton) findViewById(R.id.fb_login);
-        fbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
-        fbLogin.registerCallback(callbackManager, new FBCallBack());
-    }
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
+        signup = (Button) findViewById(R.id.signup_signup_button);
+        fbSignup = (LoginButton) findViewById(R.id.fb_signup);
+        name = (EditText) findViewById(R.id.signup_name);
+        contactNumber = (EditText) findViewById(R.id.signup_contact_number);
+        dob = (DatePicker) findViewById(R.id.signup_date);
+        email = (EditText) findViewById(R.id.signup_email);
+        password = (EditText) findViewById(R.id.signup_password);
+        confirmPassword = (EditText) findViewById(R.id.signup_confirm_password);
+        signup.setOnClickListener(new SignupOnClickListener());
+        callbackManager = CallbackManager.Factory.create();
+        fbSignup.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        fbSignup.registerCallback(callbackManager, new SignUpActivity.FBCallBack());
+
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -47,6 +63,22 @@ public class LoginActivity extends AppCompatActivity
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    private class SignupOnClickListener implements View.OnClickListener
+    {
+
+        @Override
+        public void onClick(View v)
+        {
+            if (confirmPassword.getText().equals(password.getText()))
+            {
+                //ToDo
+            } else
+            {
+                Toast.makeText(SignUpActivity.this, "passwords didn't match", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
     private class FBCallBack implements FacebookCallback<LoginResult>
     {
 
@@ -61,7 +93,6 @@ public class LoginActivity extends AppCompatActivity
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response)
                         {
-                            Log.e(TAG, "onCompleted: " + object);
                             Log.v("LoginActivity", response.toString());
                             try
                             {
@@ -84,14 +115,13 @@ public class LoginActivity extends AppCompatActivity
         @Override
         public void onCancel()
         {
-            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-            startActivity(intent);
+
         }
 
         @Override
         public void onError(FacebookException error)
         {
-            Toast.makeText(LoginActivity.this, "Sorry there was an error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpActivity.this, "Sorry there was an error", Toast.LENGTH_SHORT).show();
         }
     }
 }

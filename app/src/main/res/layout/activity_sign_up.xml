@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_sign_up"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.dam.mycrush.SignUpActivity">
+
+    <ScrollView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/signup_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="email" />
+
+            <EditText
+                android:id="@+id/signup_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="name" />
+
+            <EditText
+                android:id="@+id/signup_contact_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="contact number" />
+
+            <EditText
+                android:id="@+id/signup_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="password" />
+
+            <EditText
+                android:id="@+id/signup_confirm_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="confirm password" />
+
+            <DatePicker
+                android:id="@+id/signup_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/signup_signup_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="signup" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/fb_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FB" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
