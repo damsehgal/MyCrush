@@ -4,7 +4,7 @@
 
     Author: Thomas Jarosch <thomas.jarosch@intra2net.com>
     Licensed under the same licenses as inotify-cxx.
-	Steps for compilation -> g++ -c g++ -c inotify-cxx.cpp
+	Steps for compilation -> g++ -c inotify-cxx.cpp
 	ar rvs inotify-cxx.a inotify-cxx.o
 	g++ addNodesInGraph.cpp inotify-cxx.o
 
@@ -21,7 +21,8 @@ int main(void)
 {
     string watch_dir = "./graph";
 
-    try {
+    try 
+    {
         Inotify notify;
 
         InotifyWatch watch(watch_dir, IN_ALL_EVENTS);
