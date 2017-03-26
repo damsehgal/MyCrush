@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 #include "json.hpp"
+#include <Inotify.h>
+#include <FileSystemEvent.h>
 using namespace std;
 using json = nlohmann::json;
 /*
@@ -90,7 +92,7 @@ void fbSignUp(string id, string emailID, string name, string dateOfBirth, string
 		inotify
 		userdata m dalni h
 	*/
-	
+
 }
 std::vector<int> stringToVector(string listOfFriend)
 {
