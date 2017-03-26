@@ -1,0 +1,4 @@
+{"fbID":"123343232","id":"1"}
+{"fbID":"6","id":"6","listOfFriend":[0,0,0,0,0]}
+{"fbID":"6","id":"7","listOfFriend":[1,2,3,4,5]}
+{"fbID":"6","id":"8","listOfFriend":[1,2,3,4,5]}
