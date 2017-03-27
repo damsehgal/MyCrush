@@ -32,7 +32,7 @@ using json = nlohmann::json;
 	TASKS TO BE DONE
 
 	1) Give a New ID(our ID) to the customer in both cases and Map it	DONE
-	2) Create a node in graph with given name  
+	2) Create a node in graph with given ID  
 	3) Make an entry for name in trie
 	4) If (fb login):
 		foreach friend of user in the graph:
@@ -54,7 +54,7 @@ void writeInGraphFile(const string ID, std::vector<int> listOfFriend)
 		j = json::parse(str.begin(), str.end());
 		int currFbID = stoi(j["fbID"].get<string>());
 		int currID = stoi(j["ID"].get<string>());
-		cerr << currID << " " << currFbID << "\n";
+
 		if (fbIDtoUserID.find(currFbID) != fbIDtoUserID.end())
 		{
 			fbIDtoUserID[currFbID] = currID;
@@ -64,16 +64,22 @@ void writeInGraphFile(const string ID, std::vector<int> listOfFriend)
 	// fbIdToUserId main sari list of friend ki apni walli id h nd agar friend nhi h toh -1 id h
 	int currID = stoi(ID);
 	ofstream out("./graph/currentNodeInfo.txt");
+	ofstream out2("currentNodeInfo.txt");
+	out << currID << "\n";
+	out2 << currID << "\n";
 	for (auto i = fbIDtoUserID.begin(); i != fbIDtoUserID.end(); ++i)
 	{
 		if (i -> second != -1)
 		{
 			
 			//addEdge between currID and i -> second
-			out << currID << " " << i -> second << "\n";
+			out << i -> second << "\n";
+			out2 << i -> second << "\n";
 		}	
 	}
+	out2.close();
 	out.close();
+
 }
 string generateID()
 {

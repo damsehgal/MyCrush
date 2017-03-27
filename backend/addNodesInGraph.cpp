@@ -10,14 +10,45 @@
 
 */
 
-#include <exception>
-#include <iostream>
-
+#include <bits/stdc++.h>
 #include "inotify-cxx.h"
 
 using namespace std;
 
-int main(void)
+std::vector<std::vector<int> > graph(1);
+// graph is adjacency list 
+// 1 based indexing
+
+
+void addNodeInGraph()
+{
+    // read file
+    std::ifstream in;
+    in.open ("currentNodeInfo.txt", std::ifstream::in);
+    int start, end;
+    in >> start;
+    graph.resize(start + 1);
+    while (in >> end)
+    {   
+        graph[end].push_back(start);
+        graph[start].push_back(end);
+    }
+    for (int i = 1; i < graph.size(); ++i)
+    {
+        if (graph[i].size() > 0)
+        {
+            cout << "[" << i << "]";
+            for (int j = 0; j < graph[i].size(); ++j)
+            {
+                cout << graph[i][j] << " ";
+            }
+            cout << "\n";
+        }
+    }
+    in.close();
+
+}
+void watchDirectory()
 {
     string watch_dir = "./graph";
 
@@ -28,11 +59,10 @@ int main(void)
         InotifyWatch watch(watch_dir, IN_ALL_EVENTS);
         notify.Add(watch);
 
-        cout << "Watching directory " << watch_dir << endl << endl;
+        
         for (;;) 
         {
             notify.WaitForEvents();
-
             size_t count = notify.GetEventCount();
             while (count > 0) 
             {
@@ -45,10 +75,11 @@ int main(void)
                     event.DumpTypes(mask_str);
 
                     string filename = event.GetName();
-
-                    cout << "[watch " << watch_dir << "] ";
-                    cout << "event mask: \"" << mask_str << "\", ";
-                    cout << "filename: \"" << filename << "\"" << endl;
+                    if (filename == "currentNodeInfo.txt" && mask_str == "IN_CLOSE_WRITE")
+                    {
+                        
+                        addNodeInGraph();
+                    }
                 }
 
                 count--;
@@ -67,6 +98,9 @@ int main(void)
     {
         cerr << "unknown exception occured" << endl;
     }
-
+}
+int main(int argc, char const *argv[])
+{
+    watchDirectory();
     return 0;
 }
