@@ -31,14 +31,14 @@ using json = nlohmann::json;
 		fID
 	TASKS TO BE DONE
 
-	1) Give a New ID(our ID) to the customer in both cases and Map it	
+	1) Give a New ID(our ID) to the customer in both cases and Map it	DONE
 	2) Create a node in graph with given name  
 	3) Make an entry for name in trie
 	4) If (fb login):
 		foreach friend of user in the graph:
 			add directed edge in these two
 */
-void writeInGraphFile(string ID, std::vector<int> listOfFriend)
+void writeInGraphFile(const string ID, std::vector<int> listOfFriend)
 {
 	std::map<int, int> fbIDtoUserID;
 	std::ifstream in;
@@ -47,28 +47,33 @@ void writeInGraphFile(string ID, std::vector<int> listOfFriend)
 	{
 		fbIDtoUserID[listOfFriend[i]] = -1;
 	}
+	string str;
 	json j;
-	while(in >> j)
+	while(in >> str)
 	{
-		int currFbID = stoi(j["fbID"]);
-		int currID = stoi(j["ID"]);
+		j = json::parse(str.begin(), str.end());
+		int currFbID = stoi(j["fbID"].get<string>());
+		int currID = stoi(j["ID"].get<string>());
+		cerr << currID << " " << currFbID << "\n";
 		if (fbIDtoUserID.find(currFbID) != fbIDtoUserID.end())
 		{
-			fbIDtoUserID[currFbID] = stoi(currID);
+			fbIDtoUserID[currFbID] = currID;
 		}
 	}
+	in.close();
 	// fbIdToUserId main sari list of friend ki apni walli id h nd agar friend nhi h toh -1 id h
 	int currID = stoi(ID);
-	//todo
-	addNode(currID);
+	ofstream out("./graph/currentNodeInfo.txt");
 	for (auto i = fbIDtoUserID.begin(); i != fbIDtoUserID.end(); ++i)
 	{
 		if (i -> second != -1)
 		{
-			//todo
-			addEdge(currID, i -> second);
+			
+			//addEdge between currID and i -> second
+			out << currID << " " << i -> second << "\n";
 		}	
 	}
+	out.close();
 }
 string generateID()
 {
@@ -124,7 +129,7 @@ void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string
 		inotify
 		userdata m dalni h
 	*/
-	writeInGraphFile(string ID, std::vector<int> listOfFriend);
+	writeInGraphFile(ID, listOfFriend);
 
 }
 std::vector<int> stringToVector(string listOfFriend)
