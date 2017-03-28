@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity
     private static final String TAG = LoginActivity.class.getSimpleName();
     LoginButton fbLogin;
     CallbackManager callbackManager;
-
+    Button signUp;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -38,6 +38,17 @@ public class LoginActivity extends AppCompatActivity
         fbLogin = (LoginButton) findViewById(R.id.fb_login);
         fbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
         fbLogin.registerCallback(callbackManager, new FBCallBack());
+        signUp = (Button) findViewById(R.id.sign_up);
+        signUp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent  = new Intent(LoginActivity.this, SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override

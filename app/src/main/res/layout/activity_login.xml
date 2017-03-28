@@ -18,9 +18,10 @@
         android:text="FB" />
 
     <Button
-        android:id="@+id/google_login"
+        android:id="@+id/sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="G+" />
+        android:text="signUP" />
+
 
 </LinearLayout>

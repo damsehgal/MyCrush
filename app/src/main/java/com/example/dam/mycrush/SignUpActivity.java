@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -29,14 +31,18 @@ import java.util.Arrays;
 public class SignUpActivity extends AppCompatActivity
 {
 
+    private final String[] genders = new String[]{"Male", "Female", "Others"};
     private static final String TAG = SignUpActivity.class.getSimpleName();
-    Button signup;
-    LoginButton fbSignup;
-    EditText name;
-    EditText contactNumber;
-    EditText email;
-    EditText password;
-    EditText confirmPassword;
+    Boolean isFbSignUp;
+    String linkOfProfilePicture, requestData;
+    Button signUp;
+    Spinner genderSpinner, interestedInSpinner;
+    LoginButton fbSignUp;
+    EditText nameEditText;
+    EditText contactNumberEditText;
+    EditText emailEditText;
+    EditText passwordEditText;
+    EditText confirmPasswordEditText;
     DatePicker dob;
     CallbackManager callbackManager;
 
@@ -46,18 +52,29 @@ public class SignUpActivity extends AppCompatActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        signup = (Button) findViewById(R.id.signup_signup_button);
-        fbSignup = (LoginButton) findViewById(R.id.fb_signup);
-        name = (EditText) findViewById(R.id.signup_name);
-        contactNumber = (EditText) findViewById(R.id.signup_contact_number);
+        isFbSignUp = false;
+        signUp = (Button) findViewById(R.id.signup_signup_button);
+        fbSignUp = (LoginButton) findViewById(R.id.fb_signup);
+        nameEditText = (EditText) findViewById(R.id.signup_name);
+        contactNumberEditText = (EditText) findViewById(R.id.signup_contact_number);
         dob = (DatePicker) findViewById(R.id.signup_date);
-        email = (EditText) findViewById(R.id.signup_email);
-        password = (EditText) findViewById(R.id.signup_password);
-        confirmPassword = (EditText) findViewById(R.id.signup_confirm_password);
-        signup.setOnClickListener(new SignupOnClickListener());
+        emailEditText = (EditText) findViewById(R.id.signup_email);
+        passwordEditText = (EditText) findViewById(R.id.signup_password);
+        confirmPasswordEditText = (EditText) findViewById(R.id.signup_confirm_password);
+
+        signUp.setOnClickListener(new SignUpOnClickListener());
         callbackManager = CallbackManager.Factory.create();
-        fbSignup.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
-        fbSignup.registerCallback(callbackManager, new SignUpActivity.FBCallBack());
+        fbSignUp.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        fbSignUp.registerCallback(callbackManager, new SignUpActivity.FBCallBack());
+
+        genderSpinner = (Spinner) findViewById(R.id.signup_gender);
+        interestedInSpinner = (Spinner) findViewById(R.id.signup_interested_in);
+        ArrayAdapter<String> adapterGender = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genders);
+        adapterGender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setAdapter(adapterGender);
+        ArrayAdapter<String> adapterInterestedIn = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genders);
+        adapterInterestedIn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        interestedInSpinner.setAdapter(adapterInterestedIn);
 
     }
 
@@ -68,16 +85,40 @@ public class SignUpActivity extends AppCompatActivity
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private class SignupOnClickListener implements View.OnClickListener
+    private class SignUpOnClickListener implements View.OnClickListener
     {
 
         @Override
         public void onClick(View v)
         {
-            if (confirmPassword.getText().equals(password.getText()))
+            if (confirmPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))
             {
-                //ToDo
-            } else
+                if (contactNumberEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty())
+                {
+                    Toast.makeText(SignUpActivity.this, "please fill all fields", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    String name = nameEditText.getText().toString();
+                    String emailId = emailEditText.getText().toString();
+                    String contactNumber = contactNumberEditText.getText().toString();
+                    String password = passwordEditText.getText().toString();
+                    String birthDate = "" + dob.getDayOfMonth() + "/" + (dob.getMonth() + 1) + "/" + dob.getYear();
+                    Log.e(TAG, "onClick: " + name + emailId + contactNumber + password + birthDate);
+                    String interestedIn = interestedInSpinner.getSelectedItem().toString();
+                    String gender = genderSpinner.getSelectedItem().toString();
+                    if (isFbSignUp)
+                    {
+
+                    }
+                    else
+                    {
+                        linkOfProfilePicture = "goo.gl/Tfoynm";
+                    }
+                }
+
+            }
+            else
             {
                 Toast.makeText(SignUpActivity.this, "passwords didn't match", Toast.LENGTH_SHORT).show();
             }
@@ -102,31 +143,44 @@ public class SignUpActivity extends AppCompatActivity
                             Log.v(TAG, response.toString());
                             try
                             {
-                                String email = object.getString("email");
-                                String birthday = object.getString("birthday");
+
                                 Bundle bundle = new Bundle();
                                 bundle.putString("fields", "name,picture,id");
                                 new GraphRequest(
                                         loginResult.getAccessToken(),
-                                        //AccessToken.getCurrentAccessToken(),
                                         "/me/friends",
                                         null,
                                         HttpMethod.GET,
-                                        new GraphRequest.Callback() {
-                                            public void onCompleted(GraphResponse response) {
-                                                Log.e(TAG, "onCompleted: " + response.getJSONObject().toString() );
+                                        new GraphRequest.Callback()
+                                        {
+                                            public void onCompleted(GraphResponse response)
+                                            {
+                                                Log.e(TAG, "onCompleted: " + response.getJSONObject().toString());
                                             }
                                         }
                                 ).executeAsync();
 
+                                String email = object.getString("email");
+                                String birthday = object.getString("birthday");
+                                String name = object.getString("name");
+                                int date = (birthday.charAt(3) - '0') * 10 + birthday.charAt(4) - '0';
+                                int month = (birthday.charAt(0) - '0') * 10 + birthday.charAt(1) - '0' - 1;
+                                int year = (birthday.charAt(6) - '0') * 1000 + (birthday.charAt(7) - '0') * 100 + (birthday.charAt(8) - '0') * 10 + birthday.charAt(9) - '0';
+                                dob.init(year, month, date, null);
+                                Log.e(TAG, "onCompleted: " + date + " " + month + " " + year);
+                                linkOfProfilePicture = ("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+                                emailEditText.setText(email);
+                                nameEditText.setText(name);
+                                isFbSignUp = true;
 
-                                Log.d(TAG, "onCompleted: " + email + " " + birthday);
-                            } catch (JSONException e)
+                            }
+                            catch (JSONException e)
                             {
                                 e.printStackTrace();
                             }
                         }
-                    });
+                    }
+            );
             Bundle parameters = new Bundle();
             parameters.putString("fields", "id,name,email,gender,birthday");
             request.setParameters(parameters);
