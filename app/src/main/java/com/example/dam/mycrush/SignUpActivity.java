@@ -14,7 +14,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
 import com.facebook.GraphResponse;
+
+import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -36,6 +39,7 @@ public class SignUpActivity extends AppCompatActivity
     EditText confirmPassword;
     DatePicker dob;
     CallbackManager callbackManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -56,6 +60,7 @@ public class SignUpActivity extends AppCompatActivity
         fbSignup.registerCallback(callbackManager, new SignUpActivity.FBCallBack());
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -79,11 +84,12 @@ public class SignUpActivity extends AppCompatActivity
 
         }
     }
+
     private class FBCallBack implements FacebookCallback<LoginResult>
     {
 
         @Override
-        public void onSuccess(LoginResult loginResult)
+        public void onSuccess(final LoginResult loginResult)
         {
             Log.d(TAG, "onSuccess: " + loginResult.getAccessToken().getUserId());
             GraphRequest request = GraphRequest.newMeRequest(
@@ -93,11 +99,27 @@ public class SignUpActivity extends AppCompatActivity
                         @Override
                         public void onCompleted(JSONObject object, GraphResponse response)
                         {
-                            Log.v("LoginActivity", response.toString());
+                            Log.v(TAG, response.toString());
                             try
                             {
                                 String email = object.getString("email");
                                 String birthday = object.getString("birthday");
+                                Bundle bundle = new Bundle();
+                                bundle.putString("fields", "name,picture,id");
+                                new GraphRequest(
+                                        loginResult.getAccessToken(),
+                                        //AccessToken.getCurrentAccessToken(),
+                                        "/me/friends",
+                                        null,
+                                        HttpMethod.GET,
+                                        new GraphRequest.Callback() {
+                                            public void onCompleted(GraphResponse response) {
+                                                Log.e(TAG, "onCompleted: " + response.getJSONObject().toString() );
+                                            }
+                                        }
+                                ).executeAsync();
+
+
                                 Log.d(TAG, "onCompleted: " + email + " " + birthday);
                             } catch (JSONException e)
                             {

@@ -7,8 +7,8 @@ using json = nlohmann::json;
 
 
 	argv[1]:
-		1 -> person has connected with fb
-		0 -> person has connected without fb
+		true -> person has connected with fb
+		false -> person has connected without fb
 	argv[2]:
 		emailID:
 	argv[3]:
@@ -26,15 +26,15 @@ using json = nlohmann::json;
 		if (argv[0] == 1)
 		:listOfFriend
 		in Json Format:
-			string seperated by "ID1,ID2,ID3"
+			string seperated by "," "FID1,FID2,FID3"
 	argv[9];
 		fID
 	TASKS TO BE DONE
 
 	1) Give a New ID(our ID) to the customer in both cases and Map it	DONE
-	2) Create a node in graph with given ID  
+	2) Create a node in graph with given ID  DONE
 	3) Make an entry for name in trie
-	4) If (fb login):
+	4) If (fb login): DONE
 		foreach friend of user in the graph:
 			add directed edge in these two
 */
@@ -61,7 +61,7 @@ void writeInGraphFile(const string ID, std::vector<int> listOfFriend)
 		}
 	}
 	in.close();
-	// fbIdToUserId main sari list of friend ki apni walli id h nd agar friend nhi h toh -1 id h
+	// fbIDToUserID main sari list of friend ki apni walli ID h nd agar friend nhi h toh -1 ID h
 	int currID = stoi(ID);
 	ofstream out("./graph/currentNodeInfo.txt");
 	ofstream out2("currentNodeInfo.txt");
@@ -130,7 +130,7 @@ void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string
 	writeUserData(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber);
 
 	/*
-		fbId wali m dal gayi h
+		fbID wali m dal gayi h
 		todo apply filewatcher
 		inotify
 		userdata m dalni h
