@@ -46,7 +46,7 @@ void writeInGraphFile(const string ID, std::vector<int> listOfFriend)
 {
 	std::map<int, int> fbIDtoUserID;
 	std::ifstream in;
-	in.open ("fbIDtoUserID.txt", std::ifstream::in);
+	in.open ("/home/dam/AndroidStudioProjects/MyCrush/backend/fbIDtoUserID.txt", std::ifstream::in);
 	for (int i = 0; i < listOfFriend.size(); ++i)
 	{
 		fbIDtoUserID[listOfFriend[i]] = -1;
@@ -67,8 +67,8 @@ void writeInGraphFile(const string ID, std::vector<int> listOfFriend)
 	in.close();
 	// fbIDToUserID main sari list of friend ki apni walli ID h nd agar friend nhi h toh -1 ID h
 	int currID = stoi(ID);
-	ofstream out("./graph/currentNodeInfo.txt");
-	ofstream out2("currentNodeInfo.txt");
+	ofstream out("/home/dam/AndroidStudioProjects/MyCrush/backend/graph/currentNodeInfo.txt");
+	ofstream out2("/home/dam/AndroidStudioProjects/MyCrush/backend/currentNodeInfo.txt");
 	out << currID << "\n";
 	out2 << currID << "\n";
 	for (auto i = fbIDtoUserID.begin(); i != fbIDtoUserID.end(); ++i)
@@ -89,11 +89,11 @@ string generateID()
 {
 	int numberOfUsers;
 	std::ifstream in;
-	in.open ("numberOfUsers.txt", std::ifstream::in);
+	in.open ("/home/dam/AndroidStudioProjects/MyCrush/backend/numberOfUsers.txt", std::ifstream::in);
 	in >> numberOfUsers;
 	numberOfUsers++;
 	in.close();
-	ofstream out("numberOfUsers.txt");
+	ofstream out("/home/dam/AndroidStudioProjects/MyCrush/backend/numberOfUsers.txt");
 	out << numberOfUsers;
 	out.close();
 	return to_string(numberOfUsers);
@@ -102,7 +102,7 @@ string generateID()
 void writeUserData(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber, string gender, string interestedIn)
 {
 	std::ofstream out;
-	out.open("userData.txt", std::ios::app);
+	out.open("/home/dam/AndroidStudioProjects/MyCrush/backend/userData.txt", std::ios::app);
 	json j;
 	j["ID"] = ID;
 	j["emailID"] = emailID;
@@ -126,7 +126,7 @@ void appSignUp(string ID, string emailID, string name, string dateOfBirth, strin
 void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber, string fbID, vector<int> listOfFriend, string gender, string interestedIn)
 {
 	std::ofstream out;
-	out.open("fbIDtoUserID.txt", std::ios::app);
+	out.open("/home/dam/AndroidStudioProjects/MyCrush/backend/fbIDtoUserID.txt", std::ios::app);
 	json j;
 	j["ID"] = ID;
 	j["fbID"] = fbID;

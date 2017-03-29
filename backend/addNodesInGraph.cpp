@@ -39,7 +39,7 @@ void addNodeInGraph()
 {
 	// read file
 	std::ifstream in;
-	in.open ("currentNodeInfo.txt", std::ifstream::in);
+	in.open ("/home/dam/AndroidStudioProjects/MyCrush/backend/currentNodeInfo.txt", std::ifstream::in);
 	int start, end;
 	in >> start;
 	graph.resize(start + 1);
@@ -48,13 +48,13 @@ void addNodeInGraph()
 		graph[end].push_back(start);
 		graph[start].push_back(end);
 	}
-	
 	in.close();
+	displayGraph();
 
 }
 void watchDirectory()
 {
-	string watch_dir = "./graph";
+	string watch_dir = "/home/dam/AndroidStudioProjects/MyCrush/backend/graph";
 
 	try 
 	{
