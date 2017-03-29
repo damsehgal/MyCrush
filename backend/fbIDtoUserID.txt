@@ -1,5 +1,5 @@
-{"ID":"2","fbID":"2","listOfFriend":[3,5]}
-{"ID":"3","fbID":"6","listOfFriend":[5,8]}
-{"ID":"5","fbID":"3","listOfFriend":[2,5]}
-{"ID":"6","fbID":"5","listOfFriend":[2,3,6,8]}
-{"ID":"7","fbID":"8","listOfFriend":[5,6]}
+{"ID":"2","fbID":"2","listOfFriend":[1,8]}
+{"ID":"3","fbID":"6","listOfFriend":[8,5]}
+{"ID":"5","fbID":"1","listOfFriend":[2,8]}
+{"ID":"6","fbID":"8","listOfFriend":[2,1,6,5]}
+{"ID":"8","fbID":"5","listOfFriend":[6,8]}

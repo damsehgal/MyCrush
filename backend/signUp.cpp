@@ -22,13 +22,17 @@ using json = nlohmann::json;
 		both small and large
 	argv[7]:
 		contactNumber
-	argv[8]:
+	argv[10]:
 		if (argv[0] == 1)
 		:listOfFriend
 		in Json Format:
 			string seperated by "," "FID1,FID2,FID3"
-	argv[9];
+	argv[11];
 		fID
+	argv[8];
+		gender
+	argv[9];
+		interestedIn
 	TASKS TO BE DONE
 
 	1) Give a New ID(our ID) to the customer in both cases and Map it	DONE
@@ -95,7 +99,7 @@ string generateID()
 	return to_string(numberOfUsers);
 }
 
-void writeUserData(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber)
+void writeUserData(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber, string gender, string interestedIn)
 {
 	std::ofstream out;
 	out.open("userData.txt", std::ios::app);
@@ -107,17 +111,19 @@ void writeUserData(string ID, string emailID, string name, string dateOfBirth, s
 	j["password"] = password;
 	j["linkOfProfilePicture"] = linkOfProfilePicture;
  	j["contactNumber"] = contactNumber;
+ 	j["gender"] = gender;
+ 	j["interestedIn"] = interestedIn;
  	std::vector<int> crushList;
  	j["crushList"] = crushList;
  	out << j;
 	out.close();
 }
 //4591760000232955
-void appSignUp(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber)
+void appSignUp(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber, string gender, string interestedIn)
 {
-	writeUserData(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber);
+	writeUserData(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, gender, interestedIn);
 }
-void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber, string fbID, vector<int> listOfFriend)
+void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string password, string linkOfProfilePicture, string contactNumber, string fbID, vector<int> listOfFriend, string gender, string interestedIn)
 {
 	std::ofstream out;
 	out.open("fbIDtoUserID.txt", std::ios::app);
@@ -127,7 +133,7 @@ void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string
 	j["listOfFriend"] = listOfFriend;
 	out << j << "\n";	
 	out.close();
-	writeUserData(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber);
+	writeUserData(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, gender, interestedIn);
 
 	/*
 		fbID wali m dal gayi h
@@ -166,17 +172,19 @@ int main(int argc, char const *argv[])
 	string password = string(argv[5]);
 	string linkOfProfilePicture = string(argv[6]);
 	string contactNumber = string(argv[7]);
+	string gender = string(argv[8]);
+	string interestedIn = string(argv[9]);
 	string ID = generateID();
 	if (isFbSignUp == "true")
 	{ 
-		string fbID = string(argv[8]);
-		std::vector<int> listOfFriend = stringToVector(string(argv[9]));
-		fbSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, fbID, listOfFriend);
+		string fbID = string(argv[10]);
+		std::vector<int> listOfFriend = stringToVector(string(argv[11]));
+		fbSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, fbID, listOfFriend, gender, interestedIn);
 		
 	}	
 	else 
 	{
-		appSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber);
+		appSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, gender, interestedIn);
 	}
 	return 0;
 }
