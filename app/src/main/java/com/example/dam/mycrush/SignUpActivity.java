@@ -29,7 +29,8 @@ import java.util.Arrays;
 
 public class SignUpActivity extends AppCompatActivity
 {
-
+    public static final String IP_ADDRESS = "139.59.15.102:3000";
+    public static final String SUB_URL = "/signup";
     private final String[] genders = new String[]{"Male", "Female", "Others"};
     private static final String TAG = SignUpActivity.class.getSimpleName();
     Boolean isFbSignUp;

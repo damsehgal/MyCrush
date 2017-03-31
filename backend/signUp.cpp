@@ -25,7 +25,7 @@ using json = nlohmann::json;
 	argv[10]:
 		if (argv[0] == 1)
 		:listOfFriend
-		in Json Format:
+		in Json Format:	
 			string seperated by "," "FID1,FID2,FID3"
 	argv[11];
 		fID
