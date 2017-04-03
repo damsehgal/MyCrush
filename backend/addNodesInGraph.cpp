@@ -21,7 +21,7 @@ std::vector<std::vector<int> > graph(1);
 
 void displayGraph()
 {
-	
+
 	for (int i = 1; i < graph.size(); ++i)
 	{
 		if (graph[i].size() > 0)
@@ -39,7 +39,7 @@ void addNodeInGraph()
 {
 	// read file
 	std::ifstream in;
-	in.open ("/home/dam/AndroidStudioProjects/MyCrush/backend/currentNodeInfo.txt", std::ifstream::in);
+	in.open ("./currentNodeInfo.txt", std::ifstream::in);
 	int start, end;
 	in >> start;
 	graph.resize(start + 1);
@@ -54,9 +54,9 @@ void addNodeInGraph()
 }
 void watchDirectory()
 {
-	string watch_dir = "/home/dam/AndroidStudioProjects/MyCrush/backend/graph";
+	string watch_dir = "./graph";
 
-	try 
+	try
 	{
 		Inotify notify;
 

@@ -22,6 +22,7 @@ import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -109,7 +110,7 @@ public class SignUpActivity extends AppCompatActivity
                     String gender = genderSpinner.getSelectedItem().toString();
                     if (isFbSignUp)
                     {
-
+                        Log.e(TAG, "onClick: " +  linkOfProfilePicture);
                     }
                     else
                     {
@@ -156,6 +157,8 @@ public class SignUpActivity extends AppCompatActivity
                                             public void onCompleted(GraphResponse response)
                                             {
                                                 Log.e(TAG, "onCompleted: " + response.getJSONObject().toString());
+                                                // send volley request.
+                                              //  JSONArray friendsArray = response.getJSONArray();
                                             }
                                         }
                                 ).executeAsync();
@@ -167,7 +170,7 @@ public class SignUpActivity extends AppCompatActivity
                                 int month = (birthday.charAt(0) - '0') * 10 + birthday.charAt(1) - '0' - 1;
                                 int year = (birthday.charAt(6) - '0') * 1000 + (birthday.charAt(7) - '0') * 100 + (birthday.charAt(8) - '0') * 10 + birthday.charAt(9) - '0';
                                 dob.init(year, month, date, null);
-                                Log.e(TAG, "onCompleted: " + date + " " + month + " " + year);
+                                Log.e(TAG, "onCompleted " + object.toString() );
                                 linkOfProfilePicture = ("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
                                 emailEditText.setText(email);
                                 nameEditText.setText(name);
@@ -191,13 +194,14 @@ public class SignUpActivity extends AppCompatActivity
         @Override
         public void onCancel()
         {
-
+            isFbSignUp = false;
         }
 
         @Override
         public void onError(FacebookException error)
         {
             Toast.makeText(SignUpActivity.this, "Sorry there was an error", Toast.LENGTH_SHORT).show();
+            isFbSignUp = false;
         }
     }
 }
