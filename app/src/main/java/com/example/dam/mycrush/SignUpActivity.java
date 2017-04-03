@@ -1,17 +1,27 @@
 package com.example.dam.mycrush;
 
 import android.content.Intent;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -27,14 +37,33 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity
 {
-    public static final String IP_ADDRESS = "139.59.15.102:3000";
+    public static final String IP_ADDRESS = "http://139.59.15.102:3000";
     public static final String SUB_URL = "/signup";
     private final String[] genders = new String[]{"Male", "Female", "Others"};
     private static final String TAG = SignUpActivity.class.getSimpleName();
+    private String url = IP_ADDRESS + SUB_URL;
+    public static final String IS_FB_SIGN_UP = "isFbSignUp";
+    public static final String E_MAIL_ID = "emailId";
+    public static final String NAME = "name";
+    public static final String BIRTH_DATE = "birthdate";
+    public static final String PASSWORD = "password";
+    public static final String LINK_OF_PROFILE_PICTURE = "linkOfProfilePicture";
+    public static final String CONTACT_NUMBER = "contactNumber";
+    public static final String GENDER = "gender";
+    public static final String INTERESTED_IN = "interestedIn";
+    public static final String SALT = "salt";
+    public static final String IS_NUMBER_VISIBLE = "isNumberVisible";
+    public static final String FB_ID = "fbId";
+    public static final String FRIEND_LIST = "friendList";
     Boolean isFbSignUp;
+    JSONArray friendList;
+    String fbId;
+    CheckBox isNumberVisible;
     String linkOfProfilePicture, requestData;
     Button signUp;
     Spinner genderSpinner, interestedInSpinner;
@@ -69,6 +98,7 @@ public class SignUpActivity extends AppCompatActivity
         fbSignUp.registerCallback(callbackManager, new SignUpActivity.FBCallBack());
 
         genderSpinner = (Spinner) findViewById(R.id.signup_gender);
+        isNumberVisible = (CheckBox) findViewById(R.id.signup_is_number_visible);
         interestedInSpinner = (Spinner) findViewById(R.id.signup_interested_in);
         ArrayAdapter<String> adapterGender = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genders);
         adapterGender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -76,7 +106,6 @@ public class SignUpActivity extends AppCompatActivity
         ArrayAdapter<String> adapterInterestedIn = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genders);
         adapterInterestedIn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         interestedInSpinner.setAdapter(adapterInterestedIn);
-
     }
 
     @Override
@@ -100,17 +129,70 @@ public class SignUpActivity extends AppCompatActivity
                 }
                 else
                 {
-                    String name = nameEditText.getText().toString();
-                    String emailId = emailEditText.getText().toString();
-                    String contactNumber = contactNumberEditText.getText().toString();
-                    String password = passwordEditText.getText().toString();
-                    String birthDate = "" + dob.getDayOfMonth() + "/" + (dob.getMonth() + 1) + "/" + dob.getYear();
+                    final String name = nameEditText.getText().toString();
+                    final String emailId = emailEditText.getText().toString();
+                    final String contactNumber = contactNumberEditText.getText().toString();
+                    final String password = passwordEditText.getText().toString();
+                    final String birthDate = "" + dob.getDayOfMonth() + "/" + (dob.getMonth() + 1) + "/" + dob.getYear();
                     Log.e(TAG, "onClick: " + name + emailId + contactNumber + password + birthDate);
-                    String interestedIn = interestedInSpinner.getSelectedItem().toString();
-                    String gender = genderSpinner.getSelectedItem().toString();
+                    final String interestedIn = interestedInSpinner.getSelectedItem().toString();
+                    final String gender = genderSpinner.getSelectedItem().toString();
                     if (isFbSignUp)
                     {
+
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                         Log.e(TAG, "onClick: " +  linkOfProfilePicture);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+                        {
+                            @Override
+                            public void onResponse(String response)
+                            {
+
+                            }
+                        }, new Response.ErrorListener()
+                        {
+                            @Override
+                            public void onErrorResponse(VolleyError error)
+                            {
+
+                            }
+                        }
+
+                        ){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError
+                            {
+                                Map<String,String> params = new HashMap<String, String>();
+                                params.put(IS_FB_SIGN_UP, "1");
+                                params.put(E_MAIL_ID, emailId);
+                                params.put(NAME, name);
+                                params.put(BIRTH_DATE, birthDate);
+                                params.put(PASSWORD, password);
+                                params.put(LINK_OF_PROFILE_PICTURE, linkOfProfilePicture);
+                                params.put(CONTACT_NUMBER, contactNumber);
+                                params.put(GENDER, gender);
+                                params.put(INTERESTED_IN, interestedIn);
+                                params.put(SALT, "salt");
+                                params.put(IS_NUMBER_VISIBLE, isNumberVisible.isChecked()?"true":"false");
+                                params.put(FB_ID, fbId);
+                                String toBeSend = "";
+                                for (int i = 0; i < friendList.length(); ++i)
+                                {
+                                    try
+                                    {
+                                        toBeSend += friendList.getJSONObject(i).getString("id") + ",";
+                                    }
+                                    catch (JSONException e)
+                                    {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                toBeSend = toBeSend.substring(0, toBeSend.length() - 1);
+                                params.put(FRIEND_LIST,toBeSend);
+                                return params;
+                            }
+                        };
+                        requestQueue.add(stringRequest);
                     }
                     else
                     {
@@ -157,13 +239,25 @@ public class SignUpActivity extends AppCompatActivity
                                             public void onCompleted(GraphResponse response)
                                             {
                                                 Log.e(TAG, "onCompleted: " + response.getJSONObject().toString());
+                                                try
+                                                {
+                                                    friendList = response.getJSONObject().getJSONArray("data");
+
+                                                }
+                                                catch (JSONException e)
+                                                {
+                                                    e.printStackTrace();
+                                                }
                                                 // send volley request.
                                               //  JSONArray friendsArray = response.getJSONArray();
                                             }
                                         }
                                 ).executeAsync();
 
+
                                 String email = object.getString("email");
+
+                                fbId = object.getString("id");
                                 String birthday = object.getString("birthday");
                                 String name = object.getString("name");
                                 int date = (birthday.charAt(3) - '0') * 10 + birthday.charAt(4) - '0';
@@ -175,7 +269,6 @@ public class SignUpActivity extends AppCompatActivity
                                 emailEditText.setText(email);
                                 nameEditText.setText(name);
                                 isFbSignUp = true;
-
                             }
                             catch (JSONException e)
                             {
