@@ -19,14 +19,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
-    import com.facebook.GraphResponse;
+import com.facebook.GraphResponse;
 
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
@@ -148,7 +147,18 @@ public class SignUpActivity extends AppCompatActivity
                             @Override
                             public void onResponse(String response)
                             {
-
+                                switch (response)
+                                {
+                                    case "User Already Exist":
+                                        Toast.makeText(SignUpActivity.this, "User Already Exist", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case "New user Created":
+                                        Toast.makeText(SignUpActivity.this, "New user Created", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        Toast.makeText(SignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
                             }
                         }, new Response.ErrorListener()
                         {
@@ -205,7 +215,18 @@ public class SignUpActivity extends AppCompatActivity
                             @Override
                             public void onResponse(String response)
                             {
-
+                                switch (response)
+                                {
+                                    case "User Already Exist":
+                                        Toast.makeText(SignUpActivity.this, "User Already Exist", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case "New user Created":
+                                        Toast.makeText(SignUpActivity.this, "New user Created", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default:
+                                        Toast.makeText(SignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
                             }
                         }, new Response.ErrorListener()
                         {

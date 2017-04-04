@@ -6,8 +6,6 @@ using json = nlohmann::json;
 
 /*
 	INPUT FORMAT
-
-
 	argv[1]:
 		true -> person has connected with fb
 		false -> person has connected without fb
@@ -139,12 +137,12 @@ writeUserData(string ID, string emailID, string name, string dateOfBirth, string
 	j["isNumberVisible"] = isNumberVisible;
 	std::vector<int> crushList;
 	j["crushList"] = crushList;
-	out << j;
+	out << j << "\n";
 	out.close();
 	ofstream out3("../graph/currentPersonInfo.txt");
 	ofstream out2("../currentPersonInfo.txt");
-	out3 << interestedIn << "\n" << name << "\n" << gender << "\n";
 	out2 << interestedIn << "\n" << name << "\n" << gender << "\n";
+	out3 << interestedIn << "\n" << name << "\n" << gender << "\n";
 	out2.close();
 	out3.close();
 }
@@ -174,7 +172,7 @@ void fbSignUp(string ID, string emailID, string name, string dateOfBirth, string
 		fbID wali m dal gayi h
 		todo apply filewatcher
 		inotify
-		userdata m dalni h
+		userData m dalni h
 	*/
 	writeInGraphFile(ID, listOfFriend);
 
@@ -203,6 +201,27 @@ std::vector<long long int> stringToVector(string listOfFriend) {
 	return ret;
 }
 
+bool userAlreadyExist(string userEmail)
+{
+	std::ifstream in;
+	in.open("../userData.txt", std::ifstream::in);
+	string str, email;
+	json j;
+	while (in >> str)
+	{
+		j = json::parse(str.begin(), str.end());
+		email = j["emailID"].get<string>();
+		if (email == userEmail)
+		{
+			in.close();
+			return true;
+		}
+	}
+	in.close();
+	return false;
+
+}
+
 int main(int argc, char const *argv[]) {
 
 	string isFbSignUp = string(argv[1]);
@@ -217,20 +236,28 @@ int main(int argc, char const *argv[]) {
 	string ID = generateID();
 	string salt = string(argv[10]);
 	string isNumberVisible = string(argv[11]);
-	cout << isFbSignUp << " ";
-
-	if (isFbSignUp == "true")
+	
+	if (userAlreadyExist(emailID))
 	{
-		string fbID = string(argv[12]);
-		std::vector<long long int> listOfFriend = stringToVector(string(argv[13]));
-		fbSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, fbID, listOfFriend,
-				 gender, interestedIn, salt, isNumberVisible);
-
+		cout << "User Already Exist";
 	}
+
 	else
 	{
-		appSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, gender, interestedIn,
-				  salt, isNumberVisible);
+		if (isFbSignUp == "true")
+		{
+			string fbID = string(argv[12]);
+			std::vector<long long int> listOfFriend = stringToVector(string(argv[13]));
+			fbSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, fbID, listOfFriend,
+					 gender, interestedIn, salt, isNumberVisible);
+
+		}
+		else
+		{
+			appSignUp(ID, emailID, name, dateOfBirth, password, linkOfProfilePicture, contactNumber, gender, interestedIn,
+					  salt, isNumberVisible);
+		}
+		cout << "New user Created";
 	}
 	return 0;
 }

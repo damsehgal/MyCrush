@@ -6,8 +6,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -21,89 +29,93 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity
 {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
-    LoginButton fbLogin;
-    CallbackManager callbackManager;
     Button signUp;
+    Button login;
+    EditText email, password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        callbackManager = CallbackManager.Factory.create();
         setContentView(R.layout.activity_login);
-        fbLogin = (LoginButton) findViewById(R.id.fb_login);
-        fbLogin.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
-        fbLogin.registerCallback(callbackManager, new FBCallBack());
-        signUp = (Button) findViewById(R.id.sign_up);
-        signUp.setOnClickListener(new View.OnClickListener()
+        login = (Button) findViewById(R.id.login_button);
+        email = (EditText) findViewById(R.id.login_email_id);
+        password = (EditText) findViewById(R.id.login_password);
+        login.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                Intent intent  = new Intent(LoginActivity.this, SignUpActivity.class);
-                startActivity(intent);
-                finish();
+                String url =  SignUpActivity.IP_ADDRESS + "/getSalt";
+                RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response)
+                    {
+                        Log.e(TAG, "onResponse: " + response);
+                        if (response.equals("No user found"))
+                        {
+                            Toast.makeText(LoginActivity.this, "No user found", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, SignUpActivity.IP_ADDRESS + "/login", new Response.Listener<String>()
+                            {
+                                @Override
+                                public void onResponse(String response)
+                                {
+                                    Log.e(TAG, "onResponse: " + response);
+                                }
+                            }, new Response.ErrorListener()
+                            {
+                                @Override
+                                public void onErrorResponse(VolleyError error)
+                                {
+
+                                }
+                            }){
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError
+                                {
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put(SignUpActivity.E_MAIL_ID, email.getText().toString());
+                                    params.put(SignUpActivity.PASSWORD, password.getText().toString());
+                                    return params;
+                                }
+                            };
+                            requestQueue1.add(stringRequest1);
+                        }
+                    }
+                }, new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error)
+                    {
+
+                    }
+                })
+                {
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError
+                    {
+                        Map<String,String> params = new HashMap<String, String>();
+                        params.put(SignUpActivity.E_MAIL_ID, email.getText().toString());
+                        return params;
+                    }
+                };
+                requestQueue.add(stringRequest);
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-    private class FBCallBack implements FacebookCallback<LoginResult>
-    {
-
-        @Override
-        public void onSuccess(LoginResult loginResult)
-        {
-            Log.d(TAG, "onSuccess: " + loginResult.getAccessToken().getUserId());
-            GraphRequest request = GraphRequest.newMeRequest(
-                    loginResult.getAccessToken(),
-                    new GraphRequest.GraphJSONObjectCallback()
-                    {
-                        @Override
-                        public void onCompleted(JSONObject object, GraphResponse response)
-                        {
-                            Log.e(TAG, "onCompleted: " + object);
-                            Log.v("LoginActivity", response.toString());
-                            try
-                            {
-                                String email = object.getString("email");
-                                String birthday = object.getString("birthday");
-                                Log.d(TAG, "onCompleted: " + email + " " + birthday);
-                            } catch (JSONException e)
-                            {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-            Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email,gender,birthday");
-            request.setParameters(parameters);
-            request.executeAsync();
-
-        }
-
-        @Override
-        public void onCancel()
-        {
-            Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
-            startActivity(intent);
-        }
-
-        @Override
-        public void onError(FacebookException error)
-        {
-            Toast.makeText(LoginActivity.this, "Sorry there was an error", Toast.LENGTH_SHORT).show();
-        }
     }
 }
 
