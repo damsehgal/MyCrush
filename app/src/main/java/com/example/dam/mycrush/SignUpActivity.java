@@ -129,7 +129,8 @@ public class SignUpActivity extends AppCompatActivity
                 }
                 else
                 {
-                    final String name = nameEditText.getText().toString();
+                    final String name = nameEditText.getText().toString().replace(' ', '_');
+
                     final String emailId = emailEditText.getText().toString();
                     final String contactNumber = contactNumberEditText.getText().toString();
                     final String password = passwordEditText.getText().toString();
@@ -197,6 +198,44 @@ public class SignUpActivity extends AppCompatActivity
                     else
                     {
                         linkOfProfilePicture = "goo.gl/Tfoynm";
+                        RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+                        Log.e(TAG, "onClick: " +  linkOfProfilePicture);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+                        {
+                            @Override
+                            public void onResponse(String response)
+                            {
+
+                            }
+                        }, new Response.ErrorListener()
+                        {
+                            @Override
+                            public void onErrorResponse(VolleyError error)
+                            {
+
+                            }
+                        }
+
+                        ){
+                            @Override
+                            protected Map<String, String> getParams() throws AuthFailureError
+                            {
+                                Map<String,String> params = new HashMap<String, String>();
+                                params.put(IS_FB_SIGN_UP, "0");
+                                params.put(E_MAIL_ID, emailId);
+                                params.put(NAME, name);
+                                params.put(BIRTH_DATE, birthDate);
+                                params.put(PASSWORD, password);
+                                params.put(LINK_OF_PROFILE_PICTURE, linkOfProfilePicture);
+                                params.put(CONTACT_NUMBER, contactNumber);
+                                params.put(GENDER, gender);
+                                params.put(INTERESTED_IN, interestedIn);
+                                params.put(SALT, "salt");
+                                params.put(IS_NUMBER_VISIBLE, isNumberVisible.isChecked()?"true":"false");
+                                return params;
+                            }
+                        };
+                        requestQueue.add(stringRequest);
                     }
                 }
 
