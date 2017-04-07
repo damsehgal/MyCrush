@@ -153,7 +153,9 @@ public class SignUpActivity extends AppCompatActivity
                                         Toast.makeText(SignUpActivity.this, "User Already Exist", Toast.LENGTH_SHORT).show();
                                         break;
                                     case "New user Created":
-                                        Toast.makeText(SignUpActivity.this, "New user Created", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+                                        finish();
                                         break;
                                     default:
                                         Toast.makeText(SignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();

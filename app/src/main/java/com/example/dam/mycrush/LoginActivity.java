@@ -75,6 +75,13 @@ public class LoginActivity extends AppCompatActivity
                                 public void onResponse(String response)
                                 {
                                     Log.e(TAG, "onResponse: " + response);
+                                    if(!(response.equals("incorrect password") || response.equals("user does not exist")))
+                                    {
+                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                        intent.putExtra("ID", response);
+                                        startActivity(intent);
+                                        finish();
+                                    }
                                 }
                             }, new Response.ErrorListener()
                             {
