@@ -1,5 +1,7 @@
+#define cerr1(a)					cerr << "[ " << a << " ]\n"
+#define cerr2(a,b)					cerr << "[ " << a << " , " << b << " ]\n"
+#define cerr3(a,b,c)				cerr << "[ " << a << " , " << b << " , " << c << " ]\n"
 #include <bits/stdc++.h>
-#include "TST.hh"
 using namespace std;
 
 /*
@@ -82,36 +84,36 @@ public:
 		right = NULL;
 		center = NULL;
 	}
-
+ 
 	bool isTerminal()
 	{
 		return personWithSameNames.size() != 0;
 	}
 };
 
-void insert(Node* &root, Person p, string name, int &it)
+void insert(Node* &root, Person p, string &name, int it)
 {
 
 	if (root == NULL)
 	{
-		root = new Node(name[it++], "");
+		root = new Node(name[it], "");
 	}
-
+	
 	if (name[it] < root -> curr)
 	{
-		insert(root -> left, p, name, ++it);
+		insert(root -> left, p, name, it);
 	}
 
 	else if(name[it] > root -> curr)
 	{
-		insert(root -> right, p, name, ++it);
+		insert(root -> right, p, name, it);
 	}
 
 	else 
 	{
 		if(it < name.length())
 		{
-			insert(root -> center, p, name, ++it);
+			insert(root -> center, p, name, it + 1);
 		}
 
 		else 
@@ -121,7 +123,7 @@ void insert(Node* &root, Person p, string name, int &it)
 	}
 }
 
-void traverse(Node* &root, string &buffer)
+void traverse(Node* &root, string buffer)
 {
 	if(root != NULL)
 	{
@@ -130,37 +132,123 @@ void traverse(Node* &root, string &buffer)
 		
 		if (root -> isTerminal())
 		{
-			buffer += '\0';
-			for (int i = 0; buffer[i]; ++i)
+			cerr1(buffer);
+			for (auto i = root -> personWithSameNames.begin(); i != root -> personWithSameNames.end(); ++i)
 			{
-				cout << buffer[i];
+				cerr2(i -> id, i -> lopp);				
 			}
-			cout << "\n";
 		}
 
 		traverse(root -> center, buffer);
 
+		buffer.erase(buffer.end() - 1);
 		traverse(root -> right, buffer);
 	}
 
 }
 
+Node* searchPrefix(Node* &root, string name, int it = 0)
+{	
+	if (root == NULL)
+	{
+		return root;
+	}	
 
+	if (it < name.length())
+	{
+		if (name[it] < root -> curr)
+		{
+			return searchPrefix(root -> left, name, it);
+		}	
+		
+		else if (name[it] > root -> curr)
+		{
+			return searchPrefix(root -> right, name, it); 
+		}
 
+		else
+		{
+			return searchPrefix(root -> center, name, it + 1);
+		}	
+	}
+
+	else
+	{
+		return root;
+	}
+}
+
+Node* getLeftMost(Node* &root, string &str)
+{
+	
+	if (root -> isTerminal())
+	{
+		return root;
+	}
+
+	else if (root -> left != NULL)
+	{
+		getLeftMost(root -> left, str);
+	}
+
+	else if(root -> center != NULL)
+	{
+		str += root -> curr;
+		getLeftMost(root -> center, str);
+	}
+
+	else
+	{
+		getLeftMost(root -> right, str);
+	}
+
+}
 int main(int argc, char const *argv[])
 {
 
-	Node* maleTree;
-	string name = "bhaskar";
-	Person p(12, "abc.vom");
-	int it = 0;
-	insert(maleTree, p, name, it);
-	p.id = 123;
-	p.lopp = "def.com";
-	name = "dam";
-	it = 0;
-	insert (maleTree, p, name, it);
-	string buffer = "";
-	traverse(maleTree, buffer);
+	Node* maleTree = NULL;
+
+	int queries;
+	cin >> queries;
+	while (queries--)
+	{
+		int type;
+		cin >> type;
+		if (type == 1)
+		{
+			//insert()
+			string name;
+			int id;
+			int it = 0;
+			string lopp;
+			cin >> name >> id >> lopp;
+			Person p(id, lopp);
+			insert(maleTree, p, name, it);  
+
+		}
+
+		else if (type == 2)
+		{
+			traverse(maleTree, "");
+		}
+
+		else if (type == 3)
+		{
+			string prefix;
+			cin >>  prefix;
+			Node* curr = searchPrefix(maleTree, prefix);
+			if(curr == NULL)
+			{
+				cout << "NO user";
+			}
+			else
+			{
+
+				Node* leftMost = getLeftMost(curr, prefix);
+				cout << prefix;
+			}
+		}
+	}
+
 	return 0;
 }
