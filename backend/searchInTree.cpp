@@ -66,6 +66,7 @@ public:
 	Node* left;
 	Node* right;
 	Node* center;
+	Node* parent;
 	char curr;
 	string currentName;
 	set <Person> personWithSameNames;
@@ -74,6 +75,7 @@ public:
 		left = NULL;
 		right = NULL;
 		center = NULL;
+		parent = NULL;
 	}
 
 	Node(char curr, string previousName)
@@ -83,6 +85,7 @@ public:
 		left = NULL;
 		right = NULL;
 		center = NULL;
+		parent = NULL;
 	}
  
 	bool isTerminal()
@@ -91,29 +94,31 @@ public:
 	}
 };
 
-void insert(Node* &root, Person p, string &name, int it)
+void insert(Node* &root, Node* &parent, Person p, string &name, int it)
 {
 
 	if (root == NULL)
 	{
+
 		root = new Node(name[it], "");
+		root -> parent = parent;
 	}
 	
 	if (name[it] < root -> curr)
 	{
-		insert(root -> left, p, name, it);
+		insert(root -> left, root, p, name, it);
 	}
 
 	else if(name[it] > root -> curr)
 	{
-		insert(root -> right, p, name, it);
+		insert(root -> right, root, p, name, it);
 	}
 
 	else 
 	{
 		if(it < name.length())
 		{
-			insert(root -> center, p, name, it + 1);
+			insert(root -> center, root, p, name, it + 1);
 		}
 
 		else 
@@ -132,7 +137,7 @@ void traverse(Node* &root, string buffer)
 		
 		if (root -> isTerminal())
 		{
-			cerr1(buffer);
+			cerr2(buffer, root -> parent -> curr);
 			for (auto i = root -> personWithSameNames.begin(); i != root -> personWithSameNames.end(); ++i)
 			{
 				cerr2(i -> id, i -> lopp);				
@@ -203,11 +208,59 @@ Node* getLeftMost(Node* &root, string &str)
 	}
 
 }
+
+Node* getSuccessor(Node* &curr, string str)
+{
+	//while parent ka left child 
+	//check if it is terminal or not
+	// if not terminal
+
+	if (curr -> left)
+	{
+		cerr1('.'); 
+		str.erase(str.end() - 1);
+		str += curr -> left -> curr;
+		cerr1(str);
+		Node* temp = getLeftMost(curr -> left, str);
+	
+		cerr1(temp -> curr);
+
+		return temp;
+	}
+
+	/*if(curr -> parent -> right)
+	{
+		curr = curr -> parent -> right;
+
+	}*/
+
+}
+
+void bfs(Node* &root)
+{
+	queue<Node*> q;
+	q.push(root);
+	while (!q.empty())
+	{
+		Node* front = q.front();
+		q.pop();
+		if (front -> left)
+			q.push(front -> left);
+		if (front -> center)
+			q.push(front -> center);
+		if (front -> right)
+			q.push(front -> right);
+		cerr3(front -> curr, front -> currentName, front -> parent -> curr);
+	}
+}
+
 int main(int argc, char const *argv[])
 {
 
-	Node* maleTree = NULL;
-
+	Node* maleTree = new Node('m', "");
+	Node* godFather = new Node('g', "godFather");
+	maleTree -> parent = godFather;
+	godFather -> right =  maleTree;
 	int queries;
 	cin >> queries;
 	while (queries--)
@@ -223,7 +276,7 @@ int main(int argc, char const *argv[])
 			string lopp;
 			cin >> name >> id >> lopp;
 			Person p(id, lopp);
-			insert(maleTree, p, name, it);  
+			insert(maleTree, godFather, p, name, it);  
 
 		}
 
@@ -243,10 +296,15 @@ int main(int argc, char const *argv[])
 			}
 			else
 			{
-
 				Node* leftMost = getLeftMost(curr, prefix);
+				cerr1(leftMost -> curr);
 				cout << prefix;
+				getSuccessor(leftMost, prefix);
 			}
+		}
+		else if (type == 4)
+		{
+			bfs (maleTree);
 		}
 	}
 
