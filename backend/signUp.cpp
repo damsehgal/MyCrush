@@ -147,8 +147,8 @@ writeUserData(string ID, string emailID, string name, string dateOfBirth, string
 	out3.close();
 	ofstream out4("../ternarySearchInsert/insert.txt");
 	ofstream out5("../tstInsert.txt");
-	out5 << name << " " << id << " " << linkOfProfilePicture;
-	out4 << name << " " << id << " " << linkOfProfilePicture;
+	out5 << name << " " << ID << " " << linkOfProfilePicture;
+	out4 << name << " " << ID << " " << linkOfProfilePicture;
 	out5.close();
 	out4.close();
 }
