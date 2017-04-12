@@ -24,6 +24,7 @@ public:
     string interestedIn;
     string name;
     string gender;
+    string linkOfProfilePicture;
 };
 
 std::vector <Node> persons(1);
@@ -65,8 +66,30 @@ void addPersonGender() {
     std::ifstream in;
     in.open("./currentPersonInfo.txt", std::ifstream::in);
     Node currentPerson;
-    in >> currentPerson.interestedIn >> currentPerson.name >> currentPerson.gender;
+    in >> currentPerson.interestedIn >> currentPerson.name >> currentPerson.gender >> currentPerson.linkOfProfilePicture;
     persons.push_back(currentPerson);
+    in.close();
+}
+
+void bfs()
+{
+    std::ifstream in;
+    in.open("./currentSearchInGraph.txt", std::ifstream::in);
+    int id;
+    string prefix, interestedIn;
+    in >> id >> prefix >> interestedIn;
+    std::ofstream out1("./usersReturnedFromGraph.txt");
+    std::ofstream out2("./searchInGraph/usersReturnedFromGraph.txt");
+    for (int i = 0; i < graph[id].size(); ++i)
+    {
+        if (persons[graph[id][i]].gender == interestedIn && persons[graph[id][i]].name.find(prefix) != string::npos)
+        {
+            out2 << graph[id][i] << " " << persons[graph[id][i]].name << " " << persons[graph[id][i]].linkOfProfilePicture << "\n";
+            out1 << graph[id][i] << " " << persons[graph[id][i]].name << " " << persons[graph[id][i]].linkOfProfilePicture << "\n";
+        }
+    }
+    out1.close();
+    out2.close();
     in.close();
 }
 
@@ -103,6 +126,10 @@ void watchDirectory() {
                     else if (filename == "currentPersonInfo.txt" && mask_str == "IN_CLOSE_WRITE")
                     {
                         addPersonGender();
+                    }
+                    else if(filename == "currentSearchInGraph.txt" && mask_str == "IN_CLOSE_WRITE")
+                    {
+                        bfs();
                     }
                 }
 

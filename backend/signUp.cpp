@@ -141,8 +141,8 @@ writeUserData(string ID, string emailID, string name, string dateOfBirth, string
 	out.close();
 	ofstream out3("../graph/currentPersonInfo.txt");
 	ofstream out2("../currentPersonInfo.txt");
-	out2 << interestedIn << "\n" << name << "\n" << gender << "\n";
-	out3 << interestedIn << "\n" << name << "\n" << gender << "\n";
+	out2 << interestedIn << "\n" << name << "\n" << gender << "\n" << linkOfProfilePicture << "\n";
+	out3 << interestedIn << "\n" << name << "\n" << gender << "\n" << linkOfProfilePicture << "\n";
 	out2.close();
 	out3.close();
 	ofstream out4("../ternarySearchInsert/insert.txt");

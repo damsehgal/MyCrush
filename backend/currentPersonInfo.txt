@@ -1,3 +1,4 @@
-female
-bhaska
 male
+chahat
+female
+lopp
