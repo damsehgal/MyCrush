@@ -1,2 +1,0 @@
-{"ID":"1","fbID":"123","listOfFriend":[12]}
-{"ID":"2","fbID":"12","listOfFriend":[123]}

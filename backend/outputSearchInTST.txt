@@ -1,0 +1,3 @@
+dam id = 5 linkOfProfilePicture = lopp
+dam id = 4 linkOfProfilePicture = lopp
+damsehgal id = 6 linkOfProfilePicture = lopp

@@ -20,6 +20,16 @@ import java.util.Map;
 
 public class Java8WatchServiceExample {
 
+    public interface OnFileChangeListener{
+        void OnFileChange(String fileName);
+    }
+
+    public OnFileChangeListener onFileChangeListener;
+
+    public void setOnFileChangeListener(OnFileChangeListener onFileChangeListener) {
+        this.onFileChangeListener = onFileChangeListener;
+    }
+
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys;
 
@@ -86,8 +96,10 @@ public class Java8WatchServiceExample {
                 Path child = dir.resolve(name);
 
                 // print out event
-                System.out.format("%s: %s\n", event.kind().name(), child);
 
+                //System.out.format("%s: %s\n", event.kind().name(), child);
+		if (onFileChangeListener != null)                
+			onFileChangeListener.OnFileChange(child.toString());
                 // if directory is created, and watching recursively, then register it and its sub-directories
                 if (kind == ENTRY_CREATE) {
                     try {
