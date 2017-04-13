@@ -13,7 +13,7 @@ using namespace std;
 
 */
 
-void watchDirectory() {
+void watchDirectory(string inputFileName) {
     string watch_dir = "../outputSearchInTernarySearchTree";
 
     try
@@ -39,10 +39,10 @@ void watchDirectory() {
                     event.DumpTypes(mask_str);
 
                     string filename = event.GetName();
-                    if (filename == "outputSearchInTST.txt" && mask_str == "IN_CLOSE_WRITE")
+                    if (filename == inputFileName && mask_str == "IN_CLOSE_WRITE")
                     {
                      	std::ifstream in;
-                     	in.open("../outputSearchInTST.txt", std::ifstream::in);
+                     	in.open(("../" + inputFileName).c_str(), std::ifstream::in);
                      	string str;
                      	while(getline(in, str))
                      	{
@@ -71,6 +71,19 @@ void watchDirectory() {
     }
 }
 
+void searchAll(string name)
+{
+	ofstream out1("../inputSearchAllInTST.txt");
+	ofstream out2("../ternarySearchInsert/inputSearchAllInTST.txt");
+	out1 << name;
+	out2 << name;
+	out1.close();
+	out2.close();
+	
+	watchDirectory("outputSearchAllInTST.txt");
+}
+
+
 void searchInTST(string prefix, string numberOfUsers)
 {
 	ofstream out1("../inputSearchInTST.txt");
@@ -79,7 +92,7 @@ void searchInTST(string prefix, string numberOfUsers)
 	out2 << numberOfUsers << " " << prefix << " ";
 	out1.close();
 	out2.close();
-	watchDirectory();
+	watchDirectory("outputSearchInTST.txt");
 }
 
 int main(int argc, char const *argv[])
@@ -89,6 +102,10 @@ int main(int argc, char const *argv[])
 	{
 		searchInTST(argv[2], argv[3]);
 	}
-	
+	else
+	{
+		searchAll(string(argv[2]));
+
+	}
 	return 0;
 }

@@ -68,6 +68,20 @@
                             System.err.print("IO Exception");
                         }
                     }
+                    else if (fileName.equals("../ternarySearchInsert/inputSearchAllInTST.txt"))
+                    {
+                        try
+                        {
+                            Scanner scanner = new Scanner(new FileReader("../inputSearchAllInTST.txt"));
+                            getAllPersons(scanner.next());
+                            scanner.close();
+                        }
+                        catch (FileNotFoundException e)
+                        {
+                            System.err.print("IO Exception");
+
+                        }
+                    }
                 }
             });
             java8WatchServiceExample.processEvents();
@@ -75,20 +89,27 @@
 
 
         }
-        public static void getAllPersons(String name) {
+        private static void getAllPersons(String name) throws FileNotFoundException {
             SetOfPerson setOfPerson = ternarySearchTree.get(name);
+            PrintWriter printWriter = new PrintWriter("../outputSearchAllInTST.txt");
+            PrintWriter printWriter1 = new PrintWriter("../outputSearchInTernarySearchTree/outputSearchAllInTST.txt");
+
             if (setOfPerson == null) {
-                System.err.println("no user found");
+                printWriter.println("no user found");
+                printWriter1.println("no user found");
             }
             else
             {
                 for (Person person:setOfPerson.set)
                 {
-                    System.err.println(person);
+                    printWriter.println(person);
+                    printWriter1.println("no user found");
                 }
             }
+            printWriter.close();
+            printWriter1.close();
         }
-        public static void insert(String name, long id, String lopp)
+        private static void insert(String name, long id, String lopp)
         {
             Person person = new Person(id, lopp);
             if(ternarySearchTree.get(name) == null)
@@ -104,8 +125,8 @@
 
         }
 
-        public static void returnPerson(int numberOfPerson, String prefix) throws FileNotFoundException {
-            PrintWriter printWriter = new PrintWriter("../outputSearchInTST.txt");;
+        private static void returnPerson(int numberOfPerson, String prefix) throws FileNotFoundException {
+            PrintWriter printWriter = new PrintWriter("../outputSearchInTST.txt");
             PrintWriter printWriter1 = new PrintWriter("../outputSearchInTernarySearchTree/outputSearchInTST.txt");
 
             List<SetOfPerson> listSetOfPerson = ternarySearchTree.matchPrefix(prefix, numberOfPerson);
