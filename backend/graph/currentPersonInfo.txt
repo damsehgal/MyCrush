@@ -1,4 +1,4 @@
-female
-dam
-male
-lopp
+F
+c
+m
+1

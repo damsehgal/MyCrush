@@ -178,7 +178,7 @@ public class SignUpActivity extends AppCompatActivity
                                 Map<String,String> params = new HashMap<String, String>();
                                 params.put(IS_FB_SIGN_UP, "1");
                                 params.put(E_MAIL_ID, emailId);
-                                params.put(NAME, name);
+                                params.put(NAME, name.toLowerCase());
                                 params.put(BIRTH_DATE, birthDate);
                                 params.put(PASSWORD, password);
                                 params.put(LINK_OF_PROFILE_PICTURE, linkOfProfilePicture);

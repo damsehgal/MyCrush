@@ -68,4 +68,59 @@ app.post('/login', function(req, res){
 	});
 });
 
+app.post('/searchAll', function(req, res){
+	var cmd = '../searchInTst.out true ' + req.body.name;
+	exec(cmd, function(error, stdout, stderr) {
+	  // command output is in stdout
+	  console.log("error: ", error);
+	  console.log("Output: ", stdout);
+	  console.log("STDERR: ", stderr);
+	  if(error){
+	  	res.sendStatus(500);
+	  }
+	  else{
+		res.send(stdout);
+	  }
+
+	});
+});
+
+
+app.post('/searchInTst', function(req, res){
+	var cmd = '../searchInTst.out false ' + req.body.prefix + ' ' + req.body.numberOfPerson;
+	exec(cmd, function(error, stdout, stderr) {
+	  // command output is in stdout
+	  console.log("error: ", error);
+	  console.log("Output: ", stdout);
+	  console.log("STDERR: ", stderr);
+	  if(error){
+	  	res.sendStatus(500);
+	  }
+	  else{
+		res.send(stdout);
+	  }
+
+	});
+});
+
+
+app.post('/searchInGraph', function(req, res){
+	var cmd = '../searchInGraph.out ' + req.body.id + ' ' + req.body.prefix + ' ' + req.body.interestedIn;
+	exec(cmd, function(error, stdout, stderr) {
+	  // command output is in stdout
+	  console.log("error: ", error);
+	  console.log("Output: ", stdout);
+	  console.log("STDERR: ", stderr);
+	  if(error){
+	  	res.sendStatus(500);
+	  }
+	  else{
+		res.send(stdout);
+	  }
+
+	});
+});
+
+
+
 app.listen(3000);

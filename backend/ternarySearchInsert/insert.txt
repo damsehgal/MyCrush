@@ -1,1 +1,1 @@
-dam 5 lopp
+c 6 1

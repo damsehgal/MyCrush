@@ -1,4 +1,0 @@
-{"ID":"1","contactNumber":"99888","crushList":[],"dateOfBirth":"dob","emailID":"email4","gender":"male","interestedIn":"female","isNumberVisible":"true","linkOfProfilePicture":"lopp","name":"damsehgal","password":"pass","salt":"salt"}
-{"ID":"2","contactNumber":"99888","crushList":[],"dateOfBirth":"dob","emailID":"email3","gender":"male","interestedIn":"female","isNumberVisible":"true","linkOfProfilePicture":"lopp","name":"dam","password":"pass","salt":"salt"}
-{"ID":"3","contactNumber":"99888","crushList":[],"dateOfBirth":"dob","emailID":"email2","gender":"male","interestedIn":"female","isNumberVisible":"true","linkOfProfilePicture":"lopp","name":"adam","password":"pass","salt":"salt"}
-{"ID":"5","contactNumber":"99888","crushList":[],"dateOfBirth":"dob","emailID":"email41","gender":"male","interestedIn":"female","isNumberVisible":"true","linkOfProfilePicture":"lopp","name":"dam","password":"pass","salt":"salt"}
