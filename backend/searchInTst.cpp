@@ -24,7 +24,6 @@ void watchDirectory(string inputFileName) {
         notify.Add(watch);
 
 
-        cerr << "watching directory"
         for (;;)
         {
             notify.WaitForEvents();

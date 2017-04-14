@@ -31,13 +31,13 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
-        final String id = intent.getStringExtra("ID");
+        final String id = "1";
         final String interestedIn = "female";
         prefix = (EditText) findViewById(R.id.home_prefix);
         searchAll = (Button) findViewById(R.id.home_search_all);
         searchInGraph = (Button) findViewById(R.id.search_in_graph);
         searchPrefix = (Button) findViewById(R.id.search_prefix);
-
+    
         searchInGraph.setOnClickListener(new View.OnClickListener()
         {
             @Override

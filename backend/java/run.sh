@@ -1,4 +1,4 @@
-cd ~/AndroidStudioProjects/MyCrush/backend/java/
+cd /home/java/
 javac -d . Person.java
 javac -d . SetOfPerson.java
 javac -d . TernarySearchTree.java
