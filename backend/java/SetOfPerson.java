@@ -1,6 +1,5 @@
 package com.company;
 
-import com.company.Person;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,8 +9,8 @@ import java.util.Set;
 public class SetOfPerson {
     String name;
     public Set<Person> set;
-    SetOfPerson(String name)
-    {
+
+    SetOfPerson(String name) {
         this.name = name;
         set = new HashSet<Person>();
     }

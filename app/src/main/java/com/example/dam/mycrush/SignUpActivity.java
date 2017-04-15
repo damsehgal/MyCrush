@@ -93,16 +93,19 @@ public class SignUpActivity extends AppCompatActivity
 
         signUp.setOnClickListener(new SignUpOnClickListener());
         callbackManager = CallbackManager.Factory.create();
-        fbSignUp.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday", "user_friends"));
+        fbSignUp.setReadPermissions(Arrays.asList("public_profile", "email", "user_birthday",
+                "user_friends"));
         fbSignUp.registerCallback(callbackManager, new SignUpActivity.FBCallBack());
 
         genderSpinner = (Spinner) findViewById(R.id.signup_gender);
         isNumberVisible = (CheckBox) findViewById(R.id.signup_is_number_visible);
         interestedInSpinner = (Spinner) findViewById(R.id.signup_interested_in);
-        ArrayAdapter<String> adapterGender = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genders);
+        ArrayAdapter<String> adapterGender = new ArrayAdapter<String>(this, android.R.layout
+                .simple_spinner_item, genders);
         adapterGender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genderSpinner.setAdapter(adapterGender);
-        ArrayAdapter<String> adapterInterestedIn = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genders);
+        ArrayAdapter<String> adapterInterestedIn = new ArrayAdapter<String>(this, android.R
+                .layout.simple_spinner_item, genders);
         adapterInterestedIn.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         interestedInSpinner.setAdapter(adapterInterestedIn);
     }
@@ -120,11 +123,14 @@ public class SignUpActivity extends AppCompatActivity
         @Override
         public void onClick(View v)
         {
-            if (confirmPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))
+            if (confirmPasswordEditText.getText().toString().equals(passwordEditText.getText()
+                    .toString()))
             {
-                if (contactNumberEditText.getText().toString().isEmpty() || passwordEditText.getText().toString().isEmpty())
+                if (contactNumberEditText.getText().toString().isEmpty() || passwordEditText
+                        .getText().toString().isEmpty())
                 {
-                    Toast.makeText(SignUpActivity.this, "please fill all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "please fill all fields", Toast
+                            .LENGTH_SHORT).show();
                 }
                 else
                 {
@@ -133,7 +139,8 @@ public class SignUpActivity extends AppCompatActivity
                     final String emailId = emailEditText.getText().toString();
                     final String contactNumber = contactNumberEditText.getText().toString();
                     final String password = passwordEditText.getText().toString();
-                    final String birthDate = "" + dob.getDayOfMonth() + "/" + (dob.getMonth() + 1) + "/" + dob.getYear();
+                    final String birthDate = "" + dob.getDayOfMonth() + "/" + (dob.getMonth() +
+                            1) + "/" + dob.getYear();
                     Log.e(TAG, "onClick: " + name + emailId + contactNumber + password + birthDate);
                     final String interestedIn = interestedInSpinner.getSelectedItem().toString();
                     final String gender = genderSpinner.getSelectedItem().toString();
@@ -141,8 +148,9 @@ public class SignUpActivity extends AppCompatActivity
                     {
 
                         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        Log.e(TAG, "onClick: " +  linkOfProfilePicture);
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+                        Log.e(TAG, "onClick: " + linkOfProfilePicture);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                                new Response.Listener<String>()
                         {
                             @Override
                             public void onResponse(String response)
@@ -150,15 +158,18 @@ public class SignUpActivity extends AppCompatActivity
                                 switch (response)
                                 {
                                     case "User Already Exist":
-                                        Toast.makeText(SignUpActivity.this, "User Already Exist", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, "User Already Exist",
+                                                Toast.LENGTH_SHORT).show();
                                         break;
                                     case "New user Created":
-                                        Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                                        Intent intent = new Intent(SignUpActivity.this,
+                                                HomeActivity.class);
                                         startActivity(intent);
                                         finish();
                                         break;
                                     default:
-                                        Toast.makeText(SignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, "Error", Toast
+                                                .LENGTH_SHORT).show();
                                         break;
                                 }
                             }
@@ -171,11 +182,12 @@ public class SignUpActivity extends AppCompatActivity
                             }
                         }
 
-                        ){
+                        )
+                        {
                             @Override
                             protected Map<String, String> getParams() throws AuthFailureError
                             {
-                                Map<String,String> params = new HashMap<String, String>();
+                                Map<String, String> params = new HashMap<String, String>();
                                 params.put(IS_FB_SIGN_UP, "1");
                                 params.put(E_MAIL_ID, emailId);
                                 params.put(NAME, name.toLowerCase());
@@ -186,14 +198,17 @@ public class SignUpActivity extends AppCompatActivity
                                 params.put(GENDER, gender);
                                 params.put(INTERESTED_IN, interestedIn);
                                 params.put(SALT, "salt");
-                                params.put(IS_NUMBER_VISIBLE, isNumberVisible.isChecked()?"true":"false");
+                                params.put(IS_NUMBER_VISIBLE, isNumberVisible.isChecked() ?
+                                        "true" : "false");
                                 params.put(FB_ID, fbId);
+                                Log.e(TAG, "getParams: " + name + " " + linkOfProfilePicture);
                                 String toBeSend = "";
                                 for (int i = 0; i < friendList.length(); ++i)
                                 {
                                     try
                                     {
-                                        toBeSend += friendList.getJSONObject(i).getString("id") + ",";
+                                        toBeSend += friendList.getJSONObject(i).getString("id") +
+                                                ",";
                                     }
                                     catch (JSONException e)
                                     {
@@ -201,7 +216,7 @@ public class SignUpActivity extends AppCompatActivity
                                     }
                                 }
                                 toBeSend = toBeSend.substring(0, toBeSend.length() - 1);
-                                params.put(FRIEND_LIST,toBeSend);
+                                params.put(FRIEND_LIST, toBeSend);
                                 return params;
                             }
                         };
@@ -211,8 +226,9 @@ public class SignUpActivity extends AppCompatActivity
                     {
                         linkOfProfilePicture = "goo.gl/Tfoynm";
                         RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                        Log.e(TAG, "onClick: " +  linkOfProfilePicture);
-                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+                        Log.e(TAG, "onClick: " + linkOfProfilePicture);
+                        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                                new Response.Listener<String>()
                         {
                             @Override
                             public void onResponse(String response)
@@ -220,13 +236,16 @@ public class SignUpActivity extends AppCompatActivity
                                 switch (response)
                                 {
                                     case "User Already Exist":
-                                        Toast.makeText(SignUpActivity.this, "User Already Exist", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, "User Already Exist",
+                                                Toast.LENGTH_SHORT).show();
                                         break;
                                     case "New user Created":
-                                        Toast.makeText(SignUpActivity.this, "New user Created", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, "New user Created",
+                                                Toast.LENGTH_SHORT).show();
                                         break;
                                     default:
-                                        Toast.makeText(SignUpActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SignUpActivity.this, "Error", Toast
+                                                .LENGTH_SHORT).show();
                                         break;
                                 }
                             }
@@ -239,11 +258,12 @@ public class SignUpActivity extends AppCompatActivity
                             }
                         }
 
-                        ){
+                        )
+                        {
                             @Override
                             protected Map<String, String> getParams() throws AuthFailureError
                             {
-                                Map<String,String> params = new HashMap<String, String>();
+                                Map<String, String> params = new HashMap<String, String>();
                                 params.put(IS_FB_SIGN_UP, "0");
                                 params.put(E_MAIL_ID, emailId);
                                 params.put(NAME, name);
@@ -254,7 +274,8 @@ public class SignUpActivity extends AppCompatActivity
                                 params.put(GENDER, gender);
                                 params.put(INTERESTED_IN, interestedIn);
                                 params.put(SALT, "salt");
-                                params.put(IS_NUMBER_VISIBLE, isNumberVisible.isChecked()?"true":"false");
+                                params.put(IS_NUMBER_VISIBLE, isNumberVisible.isChecked() ?
+                                        "true" : "false");
                                 return params;
                             }
                         };
@@ -265,7 +286,8 @@ public class SignUpActivity extends AppCompatActivity
             }
             else
             {
-                Toast.makeText(SignUpActivity.this, "passwords didn't match", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "passwords didn't match", Toast.LENGTH_SHORT)
+                        .show();
             }
 
         }
@@ -300,10 +322,12 @@ public class SignUpActivity extends AppCompatActivity
                                         {
                                             public void onCompleted(GraphResponse response)
                                             {
-                                                Log.e(TAG, "onCompleted: " + response.getJSONObject().toString());
+                                                Log.e(TAG, "onCompleted: " + response
+                                                        .getJSONObject().toString());
                                                 try
                                                 {
-                                                    friendList = response.getJSONObject().getJSONArray("data");
+                                                    friendList = response.getJSONObject()
+                                                            .getJSONArray("data");
 
                                                 }
                                                 catch (JSONException e)
@@ -311,7 +335,8 @@ public class SignUpActivity extends AppCompatActivity
                                                     e.printStackTrace();
                                                 }
                                                 // send volley request.
-                                              //  JSONArray friendsArray = response.getJSONArray();
+                                                //  JSONArray friendsArray = response
+                                                // .getJSONArray();
                                             }
                                         }
                                 ).executeAsync();
@@ -322,12 +347,17 @@ public class SignUpActivity extends AppCompatActivity
                                 fbId = object.getString("id");
                                 String birthday = object.getString("birthday");
                                 String name = object.getString("name");
-                                int date = (birthday.charAt(3) - '0') * 10 + birthday.charAt(4) - '0';
-                                int month = (birthday.charAt(0) - '0') * 10 + birthday.charAt(1) - '0' - 1;
-                                int year = (birthday.charAt(6) - '0') * 1000 + (birthday.charAt(7) - '0') * 100 + (birthday.charAt(8) - '0') * 10 + birthday.charAt(9) - '0';
+                                int date = (birthday.charAt(3) - '0') * 10 + birthday.charAt(4) -
+                                        '0';
+                                int month = (birthday.charAt(0) - '0') * 10 + birthday.charAt(1)
+                                        - '0' - 1;
+                                int year = (birthday.charAt(6) - '0') * 1000 + (birthday.charAt
+                                        (7) - '0') * 100 + (birthday.charAt(8) - '0') * 10 +
+                                        birthday.charAt(9) - '0';
                                 dob.init(year, month, date, null);
-                                Log.e(TAG, "onCompleted " + object.toString() );
-                                linkOfProfilePicture = ("https://graph.facebook.com/" + object.getString("id") + "/picture?type=large");
+                                Log.e(TAG, "onCompleted " + object.toString());
+                                linkOfProfilePicture = ("https://graph.facebook.com/" + object
+                                        .getString("id") + "/picture?type=large");
                                 emailEditText.setText(email);
                                 nameEditText.setText(name);
                                 isFbSignUp = true;

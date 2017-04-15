@@ -35,7 +35,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
 * */
 public class Main {
 
-    static TernarySearchTree <SetOfPerson> ternarySearchTree;
+    static TernarySearchTree<SetOfPerson> ternarySearchTree;
 
     public static void main(String[] args) throws IOException {
 
@@ -43,35 +43,36 @@ public class Main {
         Java8WatchServiceExample java8WatchServiceExample = new Java8WatchServiceExample(Paths.get("../ternarySearchInsert"));
         java8WatchServiceExample.setOnFileChangeListener(new Java8WatchServiceExample.OnFileChangeListener() {
             BufferedReader bufferedReader;
+
             @Override
             public void OnFileChange(String fileName) {
                 System.err.println(fileName);
-                if (fileName.equals("../ternarySearchInsert/insert.txt"))
-                {
-                    try
-                    {
-                        bufferedReader= new BufferedReader(new FileReader("../tstInsert.txt"));
-                        String line;
-                        while ((line = bufferedReader.readLine()) != null)
-                        {
-                            System.err.println(line);
-			    String arr[] = line.split("\\s+");
-			    for (int i = 0; i < 3; ++i)
-			    {
-				System.err.println(arr[i]);
-			    }
-			    insert(arr[0], Long.parseLong(arr[1]), arr[2]);
+                if (fileName.equals("../ternarySearchInsert/insert.txt")) {
+                    try {
+                        bufferedReader = new BufferedReader(new FileReader("../tstInsert.txt"));
+                        String line = bufferedReader.readLine();
+
+
+                        System.err.println(line);
+                        String arr[] = line.split("\\s+");
+
+                        for (int i = 0; i < 3; i++) {
+                            try {
+                                System.out.println(arr[i]);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                System.out.println("Index is: " + i);
+                            }
                         }
+                        insert(arr[0], Long.parseLong(arr[1]), arr[2]);
+
                         bufferedReader.close();
-                    }
-                    catch (FileNotFoundException e)
-                    {
+                    } catch (FileNotFoundException e) {
                         System.err.print("IO Exception");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-                else if (fileName.equals("../ternarySearchInsert/inputSearchInTST.txt")) {
+                } else if (fileName.equals("../ternarySearchInsert/inputSearchInTST.txt")) {
                     try {
                         bufferedReader = new BufferedReader(new FileReader("../inputSearchInTST.txt"));
                         String line;
@@ -86,21 +87,15 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-
-                else if (fileName.equals("../ternarySearchInsert/inputSearchAllInTST.txt"))
-                {
-                    try
-                    {
+                } else if (fileName.equals("../ternarySearchInsert/inputSearchAllInTST.txt")) {
+                    try {
 
                         bufferedReader = new BufferedReader(new FileReader("../inputSearchAllInTST.txt"));
                         String line = bufferedReader.readLine();
                         System.err.println(line);
                         getAllPersons(line);
                         bufferedReader.close();
-                    }
-                    catch (FileNotFoundException e)
-                    {
+                    } catch (FileNotFoundException e) {
                         System.err.print("IO Exception");
 
                     } catch (IOException e) {
@@ -112,8 +107,8 @@ public class Main {
         java8WatchServiceExample.processEvents();
 
 
-
     }
+
     private static void getAllPersons(String name) throws FileNotFoundException {
         SetOfPerson setOfPerson = ternarySearchTree.get(name);
         PrintWriter printWriter = new PrintWriter("../outputSearchAllInTST.txt");
@@ -122,11 +117,8 @@ public class Main {
         if (setOfPerson == null) {
             printWriter.println("no user found");
             printWriter1.println("no user found");
-        }
-        else
-        {
-            for (Person person:setOfPerson.set)
-            {
+        } else {
+            for (Person person : setOfPerson.set) {
                 printWriter.println(person);
                 printWriter1.println("no user found");
             }
@@ -134,17 +126,14 @@ public class Main {
         printWriter.close();
         printWriter1.close();
     }
-    private static void insert(String name, long id, String lopp)
-    {
+
+    private static void insert(String name, long id, String lopp) {
         Person person = new Person(id, lopp);
-        if(ternarySearchTree.get(name) == null)
-        {
+        if (ternarySearchTree.get(name) == null) {
             SetOfPerson setOfPerson = new SetOfPerson(name);
             setOfPerson.set.add(person);
             ternarySearchTree.put(name, setOfPerson);
-        }
-        else
-        {
+        } else {
             ternarySearchTree.get(name).set.add(person);
         }
 
@@ -155,29 +144,28 @@ public class Main {
         PrintWriter printWriter1 = new PrintWriter("../outputSearchInTernarySearchTree/outputSearchInTST.txt");
 
         List<SetOfPerson> listSetOfPerson = ternarySearchTree.matchPrefix(prefix, numberOfPerson);
-            int count = 0;
+        int count = 0;
 
-            Boolean allPersonsAchieved = false;
-            for (SetOfPerson setOfPerson:listSetOfPerson) {
+        Boolean allPersonsAchieved = false;
+        for (SetOfPerson setOfPerson : listSetOfPerson) {
 
 
-                    for(Person person : setOfPerson.set)
-                    {
-                        count++;
-                        System.err.println(setOfPerson.name + " " + person);
-                        printWriter.println(setOfPerson.name + " " + person);
-                        printWriter1.println(setOfPerson.name + " " + person);
-                        if (count > numberOfPerson){
-                            allPersonsAchieved = true;
-                            break;
-                        }
+            for (Person person : setOfPerson.set) {
+                count++;
+                System.err.println(setOfPerson.name + " " + person);
+                printWriter.println(setOfPerson.name + " " + person);
+                printWriter1.println(setOfPerson.name + " " + person);
+                if (count > numberOfPerson) {
+                    allPersonsAchieved = true;
+                    break;
+                }
 
-                    }
-                    if (allPersonsAchieved)
-                        break;
             }
-            printWriter.close();
-            printWriter1.close();
+            if (allPersonsAchieved)
+                break;
+        }
+        printWriter.close();
+        printWriter1.close();
     }
 }
 

@@ -242,7 +242,7 @@ int main(int argc, char const *argv[]) {
 	string ID = generateID();
 	string salt = string(argv[10]);
 	string isNumberVisible = string(argv[11]);
-	
+	transform(gender.begin(), gender.end(), gender.begin(), ::tolower);
 	if (userAlreadyExist(emailID))
 	{
 		cout << "User Already Exist";

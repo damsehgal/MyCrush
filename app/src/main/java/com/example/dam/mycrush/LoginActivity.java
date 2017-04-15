@@ -65,9 +65,10 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                String url =  SignUpActivity.IP_ADDRESS + "/getSalt";
+                String url = SignUpActivity.IP_ADDRESS + "/getSalt";
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new
+                        Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response)
@@ -75,20 +76,26 @@ public class LoginActivity extends AppCompatActivity
                         Log.e(TAG, "onResponse: " + response);
                         if (response.equals("No user found"))
                         {
-                            Toast.makeText(LoginActivity.this, "No user found", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "No user found", Toast
+                                    .LENGTH_SHORT).show();
                         }
                         else
                         {
-                            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
-                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST, SignUpActivity.IP_ADDRESS + "/login", new Response.Listener<String>()
+                            RequestQueue requestQueue1 = Volley.newRequestQueue
+                                    (getApplicationContext());
+                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST,
+                                    SignUpActivity.IP_ADDRESS + "/login", new Response
+                                    .Listener<String>()
                             {
                                 @Override
                                 public void onResponse(String response)
                                 {
                                     Log.e(TAG, "onResponse: " + response);
-                                    if(!(response.equals("incorrect password") || response.equals("user does not exist")))
+                                    if (!(response.equals("incorrect password") || response
+                                            .equals("user does not exist")))
                                     {
-                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                        Intent intent = new Intent(LoginActivity.this,
+                                                HomeActivity.class);
                                         intent.putExtra("ID", response);
                                         startActivity(intent);
                                         finish();
@@ -101,13 +108,16 @@ public class LoginActivity extends AppCompatActivity
                                 {
 
                                 }
-                            }){
+                            })
+                            {
                                 @Override
                                 protected Map<String, String> getParams() throws AuthFailureError
                                 {
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put(SignUpActivity.E_MAIL_ID, email.getText().toString());
-                                    params.put(SignUpActivity.PASSWORD, password.getText().toString());
+                                    Map<String, String> params = new HashMap<String, String>();
+                                    params.put(SignUpActivity.E_MAIL_ID, email.getText().toString
+                                            ());
+                                    params.put(SignUpActivity.PASSWORD, password.getText()
+                                            .toString());
                                     return params;
                                 }
                             };
@@ -126,7 +136,7 @@ public class LoginActivity extends AppCompatActivity
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError
                     {
-                        Map<String,String> params = new HashMap<String, String>();
+                        Map<String, String> params = new HashMap<String, String>();
                         params.put(SignUpActivity.E_MAIL_ID, email.getText().toString());
                         return params;
                     }

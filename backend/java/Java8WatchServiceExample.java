@@ -2,7 +2,9 @@ package com.company;
 
 /**
  * Created by dam on 12/4/17.
- */import static java.nio.file.StandardWatchEventKinds.*;
+ */
+
+import static java.nio.file.StandardWatchEventKinds.*;
 
 import java.io.IOException;
 import java.nio.file.FileSystems;
@@ -20,7 +22,7 @@ import java.util.Map;
 
 public class Java8WatchServiceExample {
 
-    public interface OnFileChangeListener{
+    public interface OnFileChangeListener {
         void OnFileChange(String fileName);
     }
 
@@ -46,8 +48,7 @@ public class Java8WatchServiceExample {
     /**
      * Register the given directory with the WatchService; This function will be called by FileVisitor
      */
-    private void registerDirectory(Path dir) throws IOException
-    {
+    private void registerDirectory(Path dir) throws IOException {
         WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
         keys.put(key, dir);
     }
@@ -70,7 +71,7 @@ public class Java8WatchServiceExample {
      * Process all events for keys queued to the watcher
      */
     void processEvents() {
-        for (;;) {
+        for (; ; ) {
 
             // wait for key to be signalled
             WatchKey key;
@@ -92,14 +93,14 @@ public class Java8WatchServiceExample {
 
                 // Context for directory entry event is the file name of entry
                 @SuppressWarnings("unchecked")
-                Path name = ((WatchEvent<Path>)event).context();
+                Path name = ((WatchEvent<Path>) event).context();
                 Path child = dir.resolve(name);
 
                 // print out event
 
                 //System.out.format("%s: %s\n", event.kind().name(), child);
-		if (onFileChangeListener != null)                
-			onFileChangeListener.OnFileChange(child.toString());
+
+                onFileChangeListener.OnFileChange(child.toString());
                 // if directory is created, and watching recursively, then register it and its sub-directories
                 if (kind == ENTRY_CREATE) {
                     try {

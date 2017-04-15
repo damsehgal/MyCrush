@@ -25,31 +25,33 @@ public class HomeActivity extends AppCompatActivity
     private static final String TAG = HomeActivity.class.getSimpleName();
     EditText prefix;
     Button searchInGraph, searchAll, searchPrefix;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
-        final String id = "1";
+        final String id = "2";
         final String interestedIn = "female";
         prefix = (EditText) findViewById(R.id.home_prefix);
         searchAll = (Button) findViewById(R.id.home_search_all);
         searchInGraph = (Button) findViewById(R.id.search_in_graph);
         searchPrefix = (Button) findViewById(R.id.search_prefix);
-    
+
         searchInGraph.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest stringRequest =  new StringRequest(Request.Method.POST, "http://139.59.15.102:3000/searchInGraph", new Response.Listener<String>()
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://139" +
+                        ".59.15.102:3000/searchInGraph", new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response)
                     {
-                        Log.e(TAG, "onResponse: " + response );
+                        Log.e(TAG, "onResponse: " + response);
                     }
                 }, new Response.ErrorListener()
                 {
@@ -58,7 +60,8 @@ public class HomeActivity extends AppCompatActivity
                     {
 
                     }
-                }){
+                })
+                {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError
                     {
@@ -80,12 +83,13 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest stringRequest =  new StringRequest(Request.Method.POST, "http://139.59.15.102:3000/searchAll", new Response.Listener<String>()
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://139" +
+                        ".59.15.102:3000/searchAll", new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response)
                     {
-                        Log.e(TAG, "onResponse: " + response );
+                        Log.e(TAG, "onResponse: " + response);
                     }
                 }, new Response.ErrorListener()
                 {
@@ -94,7 +98,8 @@ public class HomeActivity extends AppCompatActivity
                     {
 
                     }
-                }){
+                })
+                {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError
                     {
@@ -113,12 +118,13 @@ public class HomeActivity extends AppCompatActivity
             public void onClick(View v)
             {
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                StringRequest stringRequest =  new StringRequest(Request.Method.POST, "http://139.59.15.102:3000/searchInTst", new Response.Listener<String>()
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://139" +
+                        ".59.15.102:3000/searchInTst", new Response.Listener<String>()
                 {
                     @Override
                     public void onResponse(String response)
                     {
-                        Log.e(TAG, "onResponse: " + response );
+                        Log.e(TAG, "onResponse: " + response);
                     }
                 }, new Response.ErrorListener()
                 {
@@ -127,7 +133,8 @@ public class HomeActivity extends AppCompatActivity
                     {
 
                     }
-                }){
+                })
+                {
                     @Override
                     protected Map<String, String> getParams() throws AuthFailureError
                     {
