@@ -69,62 +69,66 @@ public class LoginActivity extends AppCompatActivity
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new
                         Response.Listener<String>()
-                {
-                    @Override
-                    public void onResponse(String response)
-                    {
-                        Log.e(TAG, "onResponse: " + response);
-                        if (response.equals("No user found"))
                         {
-                            Toast.makeText(LoginActivity.this, "No user found", Toast
-                                    .LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            RequestQueue requestQueue1 = Volley.newRequestQueue
-                                    (getApplicationContext());
-                            StringRequest stringRequest1 = new StringRequest(Request.Method.POST,
-                                    SignUpActivity.IP_ADDRESS + "/login", new Response
-                                    .Listener<String>()
+                            @Override
+                            public void onResponse(String response)
                             {
-                                @Override
-                                public void onResponse(String response)
+                                Log.e(TAG, "onResponse: " + response);
+                                if (response.equals("No user found"))
                                 {
-                                    Log.e(TAG, "onResponse: " + response);
-                                    if (!(response.equals("incorrect password") || response
-                                            .equals("user does not exist")))
+                                    Toast.makeText(LoginActivity.this, "No user found", Toast
+                                            .LENGTH_SHORT).show();
+                                }
+                                else
+                                {
+                                    RequestQueue requestQueue1 = Volley.newRequestQueue
+                                            (getApplicationContext());
+                                    StringRequest stringRequest1 = new StringRequest(Request
+                                            .Method.POST,
+                                            SignUpActivity.IP_ADDRESS + "/login", new Response
+                                            .Listener<String>()
                                     {
-                                        Intent intent = new Intent(LoginActivity.this,
-                                                HomeActivity.class);
-                                        intent.putExtra("ID", response);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            }, new Response.ErrorListener()
-                            {
-                                @Override
-                                public void onErrorResponse(VolleyError error)
-                                {
+                                        @Override
+                                        public void onResponse(String response)
+                                        {
+                                            Log.e(TAG, "onResponse: " + response);
+                                            if (!(response.equals("incorrect password") || response
+                                                    .equals("user does not exist")))
+                                            {
+                                                Intent intent = new Intent(LoginActivity.this,
+                                                        HomeActivity.class);
+                                                intent.putExtra("ID", response);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    }, new Response.ErrorListener()
+                                    {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error)
+                                        {
 
+                                        }
+                                    })
+                                    {
+                                        @Override
+                                        protected Map<String, String> getParams() throws
+                                                AuthFailureError
+                                        {
+                                            Map<String, String> params = new HashMap<String,
+                                                    String>();
+                                            params.put(SignUpActivity.E_MAIL_ID, email.getText()
+                                                    .toString
+                                                    ());
+                                            params.put(SignUpActivity.PASSWORD, password.getText()
+                                                    .toString());
+                                            return params;
+                                        }
+                                    };
+                                    requestQueue1.add(stringRequest1);
                                 }
-                            })
-                            {
-                                @Override
-                                protected Map<String, String> getParams() throws AuthFailureError
-                                {
-                                    Map<String, String> params = new HashMap<String, String>();
-                                    params.put(SignUpActivity.E_MAIL_ID, email.getText().toString
-                                            ());
-                                    params.put(SignUpActivity.PASSWORD, password.getText()
-                                            .toString());
-                                    return params;
-                                }
-                            };
-                            requestQueue1.add(stringRequest1);
-                        }
-                    }
-                }, new Response.ErrorListener()
+                            }
+                        }, new Response.ErrorListener()
                 {
                     @Override
                     public void onErrorResponse(VolleyError error)

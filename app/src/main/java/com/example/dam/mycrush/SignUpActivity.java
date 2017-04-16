@@ -151,29 +151,30 @@ public class SignUpActivity extends AppCompatActivity
                         Log.e(TAG, "onClick: " + linkOfProfilePicture);
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                                 new Response.Listener<String>()
-                        {
-                            @Override
-                            public void onResponse(String response)
-                            {
-                                switch (response)
                                 {
-                                    case "User Already Exist":
-                                        Toast.makeText(SignUpActivity.this, "User Already Exist",
-                                                Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "New user Created":
-                                        Intent intent = new Intent(SignUpActivity.this,
-                                                HomeActivity.class);
-                                        startActivity(intent);
-                                        finish();
-                                        break;
-                                    default:
-                                        Toast.makeText(SignUpActivity.this, "Error", Toast
-                                                .LENGTH_SHORT).show();
-                                        break;
-                                }
-                            }
-                        }, new Response.ErrorListener()
+                                    @Override
+                                    public void onResponse(String response)
+                                    {
+                                        switch (response)
+                                        {
+                                            case "User Already Exist":
+                                                Toast.makeText(SignUpActivity.this, "User Already" +
+                                                        " Exist",
+                                                        Toast.LENGTH_SHORT).show();
+                                                break;
+                                            case "New user Created":
+                                                Intent intent = new Intent(SignUpActivity.this,
+                                                        HomeActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                                break;
+                                            default:
+                                                Toast.makeText(SignUpActivity.this, "Error", Toast
+                                                        .LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                }, new Response.ErrorListener()
                         {
                             @Override
                             public void onErrorResponse(VolleyError error)
@@ -229,27 +230,29 @@ public class SignUpActivity extends AppCompatActivity
                         Log.e(TAG, "onClick: " + linkOfProfilePicture);
                         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                                 new Response.Listener<String>()
-                        {
-                            @Override
-                            public void onResponse(String response)
-                            {
-                                switch (response)
                                 {
-                                    case "User Already Exist":
-                                        Toast.makeText(SignUpActivity.this, "User Already Exist",
-                                                Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "New user Created":
-                                        Toast.makeText(SignUpActivity.this, "New user Created",
-                                                Toast.LENGTH_SHORT).show();
-                                        break;
-                                    default:
-                                        Toast.makeText(SignUpActivity.this, "Error", Toast
-                                                .LENGTH_SHORT).show();
-                                        break;
-                                }
-                            }
-                        }, new Response.ErrorListener()
+                                    @Override
+                                    public void onResponse(String response)
+                                    {
+                                        switch (response)
+                                        {
+                                            case "User Already Exist":
+                                                Toast.makeText(SignUpActivity.this, "User Already" +
+                                                        " Exist",
+                                                        Toast.LENGTH_SHORT).show();
+                                                break;
+                                            case "New user Created":
+                                                Toast.makeText(SignUpActivity.this, "New user " +
+                                                        "Created",
+                                                        Toast.LENGTH_SHORT).show();
+                                                break;
+                                            default:
+                                                Toast.makeText(SignUpActivity.this, "Error", Toast
+                                                        .LENGTH_SHORT).show();
+                                                break;
+                                        }
+                                    }
+                                }, new Response.ErrorListener()
                         {
                             @Override
                             public void onErrorResponse(VolleyError error)
