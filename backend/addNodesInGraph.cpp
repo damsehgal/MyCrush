@@ -15,19 +15,19 @@
 
 using namespace std;
 
-std::vector <std::vector<int> > graph(1);
+std::vector<std::vector<int> > graph(1);
 
 // graph is adjacency list 
 // 1 based indexing
 class Node {
-public:    
+public:
     string interestedIn;
     string name;
     string gender;
     string linkOfProfilePicture;
 };
 
-std::vector <Node> persons(1);
+std::vector<Node> persons(1);
 
 void displayGraph() {
 
@@ -66,13 +66,13 @@ void addPersonGender() {
     std::ifstream in;
     in.open("./currentPersonInfo.txt", std::ifstream::in);
     Node currentPerson;
-    in >> currentPerson.interestedIn >> currentPerson.name >> currentPerson.gender >> currentPerson.linkOfProfilePicture;
+    in >> currentPerson.interestedIn >> currentPerson.name >> currentPerson.gender
+       >> currentPerson.linkOfProfilePicture;
     persons.push_back(currentPerson);
     in.close();
 }
 
-void bfs()
-{
+void bfs() {
     std::ifstream in;
     in.open("./currentSearchInGraph.txt", std::ifstream::in);
     int id;
@@ -84,8 +84,10 @@ void bfs()
     {
         if (persons[graph[id][i]].gender == interestedIn && persons[graph[id][i]].name.find(prefix) != string::npos)
         {
-            out2 << graph[id][i] << " " << persons[graph[id][i]].name << " " << persons[graph[id][i]].linkOfProfilePicture << "\n";
-            out1 << graph[id][i] << " " << persons[graph[id][i]].name << " " << persons[graph[id][i]].linkOfProfilePicture << "\n";
+            out2 << graph[id][i] << " " << persons[graph[id][i]].name << " "
+                 << persons[graph[id][i]].linkOfProfilePicture << "\n";
+            out1 << graph[id][i] << " " << persons[graph[id][i]].name << " "
+                 << persons[graph[id][i]].linkOfProfilePicture << "\n";
         }
     }
     out1.close();
@@ -127,7 +129,7 @@ void watchDirectory() {
                     {
                         addPersonGender();
                     }
-                    else if(filename == "currentSearchInGraph.txt" && mask_str == "IN_CLOSE_WRITE")
+                    else if (filename == "currentSearchInGraph.txt" && mask_str == "IN_CLOSE_WRITE")
                     {
                         bfs();
                     }
@@ -137,15 +139,15 @@ void watchDirectory() {
             }
         }
     }
-    catch(InotifyException & e)
+    catch (InotifyException &e)
     {
         cerr << "Inotify exception occured: " << e.GetMessage() << endl;
     }
-    catch(exception & e)
+    catch (exception &e)
     {
         cerr << "STL exception occured: " << e.what() << endl;
     }
-    catch(...)
+    catch (...)
     {
         cerr << "unknown exception occured" << endl;
     }

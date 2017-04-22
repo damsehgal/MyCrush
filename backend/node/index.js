@@ -104,8 +104,8 @@ app.post('/searchInTst', function(req, res){
 });
 
 
-app.post('/searchInGraph', function(req, res){
-	var cmd = '../searchInGraph.out ' + req.body.id + ' ' + req.body.prefix + ' ' + req.body.interestedIn;
+app.post('/addEdge', function(req, res){
+	var cmd = '../addEdgeInCrushGraph.out ' + req.body.start + ' ' + req.body.end;
 	exec(cmd, function(error, stdout, stderr) {
 	  // command output is in stdout
 	  console.log("error: ", error);
@@ -121,6 +121,58 @@ app.post('/searchInGraph', function(req, res){
 	});
 });
 
+
+app.post('/removeEdge', function(req, res){
+	var cmd = '../removeEdgeInGraph.out ' + req.body.start + ' ' + req.body.end;
+	exec(cmd, function(error, stdout, stderr) {
+	  // command output is in stdout
+	  console.log("error: ", error);
+	  console.log("Output: ", stdout);
+	  console.log("STDERR: ", stderr);
+	  if(error){
+	  	res.sendStatus(500);
+	  }
+	  else{
+		res.send(stdout);
+	  }
+
+	});
+});
+
+app.post('/displayCrushList', function(req, res){
+	var cmd = '../displayCrushList.out ' + req.body.start;
+	exec(cmd, function(error, stdout, stderr) {
+	  // command output is in stdout
+	  console.log("error: ", error);
+	  console.log("Output: ", stdout);
+	  console.log("STDERR: ", stderr);
+	  if(error){
+	  	res.sendStatus(500);
+	  }
+	  
+		res.send(stdout);
+
+
+	});
+});
+
+
+app.post('/displayMatchList', function(req, res){
+	var cmd = '../displayMatchList.out ' + req.body.start;
+	exec(cmd, function(error, stdout, stderr) {
+	  // command output is in stdout
+	  console.log("error: ", error);
+	  console.log("Output: ", stdout);
+	  console.log("STDERR: ", stderr);
+	  if(error){
+	  	res.sendStatus(500);
+	  }
+	  else{
+		res.send(stdout);
+	  }
+
+	});
+});
 
 
 app.listen(3000);

@@ -3,86 +3,81 @@
 
 using namespace std;
 
-void sendInput(string start)
-{
-	ofstream out("../crushGraph/displayMatchListInput.txt");
-	ofstream out2("../displayMatchListInput.txt");
-	out2 << start;
-	out << start;
-	out2.close();
-	out.close();
+void sendInput(string start) {
+    ofstream out("../crushGraph/displayMatchListInput.txt");
+    ofstream out2("../displayMatchListInput.txt");
+    out2 << start;
+    out << start;
+    out2.close();
+    out.close();
 
 }
 
-void receiveOutput()
-{
-	std::ifstream in;
+void receiveOutput() {
+    std::ifstream in;
     in.open("../displayMatchListOutput.txt", std::ifstream::in);
-	string str;
+    string str;
     while (in >> str)
     {
-    	cout << str << "\n";
+        cout << str << "\n";
     }
     in.close();
 }
 
-void watchDirectory() 
-{
-	string watch_dir = "../displayMatchList";
+void watchDirectory() {
+    string watch_dir = "../displayMatchList";
 
-	try
-	{
-		Inotify notify;
+    try
+    {
+        Inotify notify;
 
-		InotifyWatch watch(watch_dir, IN_ALL_EVENTS);
-		notify.Add(watch);
+        InotifyWatch watch(watch_dir, IN_ALL_EVENTS);
+        notify.Add(watch);
 
 
-		for (;;)
-		{
-			notify.WaitForEvents();
-			size_t count = notify.GetEventCount();
-			while (count > 0)
-			{
-				InotifyEvent event;
-				bool got_event = notify.GetEvent(&event);
+        for (;;)
+        {
+            notify.WaitForEvents();
+            size_t count = notify.GetEventCount();
+            while (count > 0)
+            {
+                InotifyEvent event;
+                bool got_event = notify.GetEvent(&event);
 
-				if (got_event)
-				{
-					string mask_str;
-					event.DumpTypes(mask_str);
+                if (got_event)
+                {
+                    string mask_str;
+                    event.DumpTypes(mask_str);
 
-					string filename = event.GetName();
-					if (filename == "displayMatchListOutput.txt" && mask_str == "IN_CLOSE_WRITE")
-					{
-						receiveOutput();
-						exit(0);
-					}
-				}
+                    string filename = event.GetName();
+                    if (filename == "displayMatchListOutput.txt" && mask_str == "IN_CLOSE_WRITE")
+                    {
+                        receiveOutput();
+                        exit(0);
+                    }
+                }
 
-				count--;
-			}
-		}
-	}
-	catch(InotifyException & e)
-	{
-		cerr << "Inotify exception occured: " << e.GetMessage() << endl;
-	}
-	catch(exception & e)
-	{
-		cerr << "STL exception occured: " << e.what() << endl;
-	}
-	catch(...)
-	{
-		cerr << "unknown exception occured" << endl;
-	}
+                count--;
+            }
+        }
+    }
+    catch (InotifyException &e)
+    {
+        cerr << "Inotify exception occured: " << e.GetMessage() << endl;
+    }
+    catch (exception &e)
+    {
+        cerr << "STL exception occured: " << e.what() << endl;
+    }
+    catch (...)
+    {
+        cerr << "unknown exception occured" << endl;
+    }
 }
 
 
-
-int main(int argc, char const *argv[])
-{
-	sendInput(string(argv[1])); // bande ki id
-	watchDirectory();
-	return 0;
+int main(int argc, char const *argv[]) {
+    sendInput(string(argv[1])); // bande ki id
+    watchDirectory();
+    return 0;
 }
